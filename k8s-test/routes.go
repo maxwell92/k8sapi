@@ -14,11 +14,19 @@ type Routes []Route
 
 
 var routes = Routes {
-	Route {
+/*	Route {
 		"Index",
 		"GET",
 		"/",
 		Index,
+	},
+*/
+
+	Route {
+		"statics",
+		"GET",
+		"/",
+		http.Handle("/", http.FileServer(http.Dir("statics"))),
 	},
 
 	Route {
