@@ -5,14 +5,61 @@ import (
     "log"
     "net/http"
     "strings"
-//    "strconv"
-    "regexp"
     "strconv"
-    "time"
-    "crypto/md5"
     "io"
-    "os"
+    "encoding/json"
+    "crypto/tls"
+    "io/ioutil"
+    "applist"
+    "appdeploy"
 )
+
+func Get(url string) (body []byte, err error) {
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},	
+	}
+
+	client := &http.Client{Transport: tr}
+	resp, err := client.Get(url)
+	if err != nil {
+		log.Println(err)
+		panic(err)
+		return nil, err	
+	}
+
+	defer resp.Body.Close()
+
+	body, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err	
+	}
+
+	return body, nil
+}
+
+func Post(url string, body io.Reader) (rtn []byte, err error) {
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},	
+	}
+
+	client := &http.Client{Transport: tr}
+	//resp, err := client.Get(url)
+	resp, err := client.Post(url, "application/json;charset=utf-8", body)
+	if err != nil {
+		log.Println(err)
+		panic(err)
+		return nil, err	
+	}
+
+	defer resp.Body.Close()
+
+	rtn, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err	
+	}
+	return rtn, nil
+}
+
 
 func sayhelloName(w http.ResponseWriter, r *http.Request) {
     r.ParseForm()
@@ -27,106 +74,146 @@ func sayhelloName(w http.ResponseWriter, r *http.Request) {
         fmt.Println("value:", strings.Join(v, ""))
     }
 
-    fmt.Fprintf(w, "Hello mushroom")
+    fmt.Fprintf(w, "Hello myce")
 
 }
 
 
-func appdeploy(w http.ResponseWriter, r *http.Request) {
+func appDeploy(w http.ResponseWriter, r *http.Request) {
     r.ParseForm()
     //注意:如果没有调用ParseForm方法, 下面无法获取表单数据
 
     fmt.Println("method:", r.Method)
     if r.Method == "GET" {
-        crutime := time.Now().Unix()
-        h := md5.New()
-        io.WriteString(h, strconv.FormatInt(crutime, 10))
-        token := fmt.Sprintf("%x", h.Sum(nil))
-        //token := fmt.Sprintf("%x", h.Sum(strconv.FormatInt(crutime, 10)))
-
-        fmt.Println(token)
-
-        t, _ := template.ParseFiles("login.gtpl")
-        t.Execute(w, token)
-        //t.Execute(w, nil)
+        t, _ := template.ParseFiles("appdeploy.html")
+        //t.Execute(w, token) //used for session keep
+        t.Execute(w, nil)
+        
     } else {
+        tempDeploy := new(appdeploy.BasicDeployment)
+        tempApp := new(appdeploy.AppDeployment)
+        fmt.Println("post assign")        
+        // tempApp assignment
+        
+        r.ParseForm() 
 
-        if len(r.Form["password"][0]) < 5 {
-            fmt.Fprintf(w, "password too short\n")
-        }
+        //注意:如果没有调用ParseForm方法, 下面无法获取表单数据
+        fmt.Println(r.Form)
+        fmt.Println("path", r.URL.Path)
+        fmt.Println("scheme", r.URL.Scheme)
+        fmt.Println(r.Form["url_long"])
 
-        /*if _, err := strconv.Atoi(r.Form.Get("age")); err != nil {
-            fmt.Fprintf(w, "Age must be number!")
-        }*/
 
-        if m, _ := regexp.MatchString("^[a-zA-Z]+$", r.Form.Get("username")); !m {
-            fmt.Fprintf(w, "username must be English\n")
-        }
 
-        if m, _ := regexp.MatchString("^[0-9]+$", r.Form.Get("age")); !m {
-            fmt.Fprintf(w, "Age must be number!")
-        }
 
-        if m, _ := regexp.MatchString("^\\p{Han}+$", r.Form.Get("realname")); !m {
-            fmt.Fprintf(w, "realname must be Chinese!\n")
-        }
+        fmt.Println("appname:", r.Form["appname"])
 
-        if m, _ := regexp.MatchString(`^([\w\.\_]{2, 10})@(\w{1,}).([a-z]{2,4})$`, r.Form.Get("email")); !m {
-            fmt.Fprintf(w, "email must be email!\n")
-        }
-        //注意:正则表达式""和``的区别
 
-        slice := []string{"apple", "pear", "banana"}
-        for _, v := range slice {
-            if v == r.Form.Get("fruit") {
-                fmt.Fprintln(w, v)
+        tempApp.Name = r.Form.Get("appname")
+        tempApp.Namespace = r.Form.Get("namespace")
+
+        dcSlice := []string{"Shijihulian", "Dianxin", "M6"}
+        for _, v := range dcSlice {
+            if v == r.Form.Get("datacenter") {
+            //    tempApp.Datacenter = v
             }
         }
+   
+        tempApp.Image = r.Form.Get("image")
+        tmp, _ := strconv.Atoi(r.Form.Get("replicas"))
+        tempApp.Replicas = float64(tmp) 
 
-        gslice := []int{1, 2}
-        for _, v := range gslice {
-            if strconv.Itoa(v) == r.Form.Get("gender") {
-                fmt.Fprintln(w, v)
+        specSlice := []string {"521M 1C", "4G 1C", "16G 8C"}
+        for _, v := range specSlice {
+            if v == r.Form.Get("spec") {
+                //tempApp.Spec = v
             }
         }
+        
+        defaultlabels := make(map[string]string, 1)
+        defaultlabels["appname"] = tempApp.Name
 
-        /*islice := []string{"football", "basketball", "tennis"}
-        a := Slice_diff(r.Form["interest"], slice)
-        if a == nil {
-            fmt.Fprintln(w, a)
-        }*/
-        //注意:Slice_diff 来自库github.com/astaxie/beeku
+        fmt.Println(tempApp)
 
-        token := r.Form.Get("token")
-        if token != "abc" {
-            fmt.Printf("token: %s\n", token)
-        } else {
-            fmt.Println("token not existed!")
-        }
+        // tempDeploy assignment
+        tempDeploy.ApiVersion = "extensions/v1beta1"
+    	tempDeploy.Kind = "Deployment"
+
+        tempDeploy.Metadata.Name = tempApp.Name
+    	tempDeploy.Spec.Replicas = tempApp.Replicas
+        tempDeploy.Spec.Template.Metadata.Labels = defaultlabels
+        tempDeploy.Spec.Template.Spec.Containers = make([]appdeploy.ContainersSTSDL, 1)
+    	tempDeploy.Spec.Template.Spec.Containers[0].Name = tempApp.Name
+        tempDeploy.Spec.Template.Spec.Containers[0].Image = tempApp.Image
 
 
-        fmt.Println("username:", r.Form["username"])
-        fmt.Println("username length:", len(r.Form["username"][0]))
-        //fmt.Println("password:", r.Form["password"])
-        //fmt.Println("usernaem:", template.HTMLEscapeString(r.Form.Get("username")))
-        fmt.Println("password:", template.HTMLEscapeString(r.Form.Get("password")))
-        fmt.Println("age:", r.Form["age"])
-        fmt.Println("realname:", r.Form["realname"])
-        fmt.Println("email:", r.Form["email"])
+        var result []byte
+        result, _ = json.MarshalIndent(tempDeploy, "", "    ")
+        fmt.Fprintln(w, string(result))
+
+	    rep, err := Post("http://172.21.1.11:8080/apis/extensions/v1beta1/namespaces/default/deployments", strings.NewReader(string(result)))
+	    if err != nil {
+		    log.Println(err)
+	    }
+
+        fmt.Println(string(rep)) 
+        appList(w, r)
+
     }
 }
 
-func applist(w http.ResponseWriter, r *http.Request) {
-    fmt.Println("method:", r.Method)
-    if r.Method == "GET" {
-         
+
+func appList(w http.ResponseWriter, r *http.Request) {
+	
+	var response []byte
+	var err error
+
+	response, err = Get("http://172.21.1.11:8080/api/v1/pods")
+    //defer response.Body.Close()
+	var rs applist.PodList
+    err = json.Unmarshal(response, &rs)
+    if err != nil {
+        log.Println(err)
     }
+    num := len(rs.Items) 
+    fmt.Println(num)
+
+    
+    podlist := make(applist.PodlistType, 20)
+
+    for i := 0; i < len(rs.Items); i++ {
+		podlist[i].Name = rs.Items[i].Metadata.Name
+		podlist[i].Ready = rs.Items[i].Status.ContainerStatuses[0].Ready
+		podlist[i].Status = rs.Items[i].Status.Phase
+		podlist[i].Restarts = int(rs.Items[i].Status.ContainerStatuses[0].RestartCount)
+		podlist[i].StartTime = rs.Items[i].Status.StartTime
+	}
+
+	applist := make(applist.AppListType, num)
+
+	for i := 0; i < len(rs.Items); i++ {
+        var dc []string
+        dc = make([]string, 1)
+        dc[0] = "shijilulian"
+
+        applist[i].Healthz.PodsAvailable = "all"
+        applist[i].Name = podlist[i].Name
+        applist[i].Label = rs.Items[i].Metadata.Labels
+        applist[i].Datacenter = dc 
+        applist[i].Replicas = 3
+        applist[i].Worktime = rs.Items[i].Metadata.CreationTimeStamp
+    }
+		
+	//json.NewEncoder(w).Encode(applist)
+    result, _ := json.MarshalIndent(applist, "", "   ")
+    fmt.Fprintln(w, string(result))	
 }
+
 
 func main() {
     http.HandleFunc("/", sayhelloName)
-    http.HandleFunc("/applist", applist)
-    http.HandleFunc("/appdeploy", appdeploy)
+    http.HandleFunc("/applist", appList)
+    http.HandleFunc("/appdeploy", appDeploy)
 
     err := http.ListenAndServe(":10000", nil)
     if err != nil {

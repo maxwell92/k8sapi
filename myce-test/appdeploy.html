@@ -1,0 +1,20 @@
+<html>
+<head>
+<title></title>
+</head>
+<body>
+<form action="http://localhost:10000/appdeploy" method="post">
+    appname:<input type="text" name="appname">
+    namespace:<input type="text" name="namespace">
+    <input type="radio" name="datacenter" value="Shijihulian">Shijihulian
+    <input type="radio" name="datacenter" value="Dianxin">Dianxin
+    <input type="radio" name="datacenter" value="M6">M6
+    image:<input type="text" name="image">
+    replicas:<input type="text" name="replicas">
+    <input type="radio" name="spec" value="1">521M 1C
+    <input type="radio" name="spec" value="2">4G 1C
+    <input type="radio" name="spec" value="3">16G 8C
+    <input type="submit" value="登陆">
+</form>
+</body>
+</html>
