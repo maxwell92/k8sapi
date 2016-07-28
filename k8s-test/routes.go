@@ -20,12 +20,19 @@ var routes = Routes {
 		"/",
 		Index,
 	},
-
+/*
 	Route {
 		"Podlist",
 		"GET",
 		"/podlist",
 		Podlist,
+	},
+*/
+    Route {
+		"AppDeployment",
+		"GET",
+		"/deployment",
+		appDeploy,
 	},
 
 

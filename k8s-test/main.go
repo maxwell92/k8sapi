@@ -10,8 +10,8 @@ import (
 func main() {
 	router := NewRouter()
 
-    //http.Handle("/statics/", http.StripPrefix("/statics/", http.FileServer(http.Dir("/static/"))))
-    http.Handle("/statics", http.FileServer(http.Dir("./static/")))
+    //router.Handle("/statics/index.html", http.StripPrefix("/statics/", http.FileServer(http.Dir("statics/"))))
+ 
 	log.Fatal(http.ListenAndServe(":10000", router))
 }
 
