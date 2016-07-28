@@ -11,7 +11,7 @@ type metadataDL struct {
     Name string `json:"name"`
     Namespace string `json:"namespace"`
     Labels map[string] string `json:"labels"`
-    Annotations map[string] string `json:"annotations"`
+    Annotations map[string] string `json:"annotations,omitempty"`
 }
 
 type specDL struct {
@@ -30,7 +30,7 @@ type metadataTSDL struct {
 }
 
 type specTSDL struct {
-    Volumes []volumesSTSDL `json:"volumes"`
+    Volumes []volumesSTSDL `json:"volumes,omitempty"`
     Containers []containersSTSDL `json:"containers"` 
 }
 
@@ -38,9 +38,9 @@ type volumesSTSDL struct {
     Name string `json:"name"`
     HostPath hostPathVSTSDL `json:"hostPath"`
     EmptyDir emptyDirVSTSDL `json:"emptyDir"`
-    PersistentVolumeClaim pvVolumeClaimVSTSDL `json:"persistentVolumeClaim"`
-    Rbd rbdVSTSDL `json:"rbd"`
-    ConfigMap configMapVSTSDL `json:"configMap"`
+    PersistentVolumeClaim *pvVolumeClaimVSTSDL `json:"persistentVolumeClaim,omitempty"`
+    Rbd *rbdVSTSDL `json:"rbd,omitempty"`
+    ConfigMap *configMapVSTSDL `json:"configMap,omitempty"`
 }
 
 type hostPathVSTSDL struct {
@@ -63,7 +63,7 @@ type rbdVSTSDL struct {
     Pool string `json:"pool"`
     User string `json:"user"`
     Keyring string `json:"keyring"`
-    SecretRef secretRefRVSTSDL `json:"secretRef"`
+    SecretRef *secretRefRVSTSDL `json:"secretRef,omitempty"`
     ReadOnly bool `json:"readOnly"` 
 }
 
@@ -84,15 +84,15 @@ type itemsConfigMap struct {
 type containersSTSDL struct {
     Name string `json:"name"`
     Image string `json:"image"`
-    Command []string `json:"command"`
-    Args []string `json:"args"`
-    Ports []portContainer `json:"ports"`     
-    Env []envContainer `json:"env"`
-    Resources resourcesContainer `json:"resources"`
-    VolumeMounts []volumeMountsContainer `json:"volumeMounts"` 
-    LivenessProbe livenessProbeContainer `json:"livenessProbe"`
-    ReadinessProbe readinessProbeContainer `json:"readinessProbe"`
-    Lifecycle lifecycleContainer `json:"lifecycle"`
+    Command []string `json:"command,omitempty"`
+    Args []string `json:"args,omitempty"`
+    Ports []portContainer `json:"ports,omitempty"`     
+    Env []envContainer `json:"env,omitempty"`
+    Resources resourcesContainer `json:"resources,omitempty"`
+    VolumeMounts []volumeMountsContainer `json:"volumeMounts,omitempty"` 
+    LivenessProbe *livenessProbeContainer `json:"livenessProbe,omitempty"`
+    ReadinessProbe *readinessProbeContainer `json:"readinessProbe,omitempty"`
+    Lifecycle *lifecycleContainer `json:"lifecycle,omitcycle"`
  
 }
 
@@ -110,8 +110,8 @@ type envContainer struct {
 }
 
 type resourcesContainer struct {
-    Limits map[string] string `json:"limits"`
-    Requests map[string] string `json:"requests"`
+    Limits map[string] string `json:"limits,omitempty"`
+    Requests map[string] string `json:"requests,omitempty"`
 }
     
 type volumeMountsContainer struct {
@@ -121,53 +121,53 @@ type volumeMountsContainer struct {
 }
 
 type livenessProbeContainer struct {
-    Exec execLiveProbeType `json:"exec"`
-    HttpGet httpGetLiveProbeType `json:"httpGet"`
-    TcpSocket tcpLiveProbeType `json:"tcpSocket"`
-    InitialDelaySeconds float64 `json:"initialDelaySeconds"`
-    TimeoutSeconds float64 `json:"timeoutSeconds"`
-    PeriodSeconds float64 `json:"periodSeconds"`
-    SuccessThreshold float64 `json:"successThreshold"`
-    FailureThreshold float64 `json:"failureThreshold"`
+    Exec *execLiveProbeType `json:"exec,omitempty"`
+    HttpGet *httpGetLiveProbeType `json:"httpGet,omitempty"`
+    TcpSocket *tcpLiveProbeType `json:"tcpSocket,omitempty"`
+    InitialDelaySeconds float64 `json:"initialDelaySeconds,omitempty"`
+    TimeoutSeconds float64 `json:"timeoutSeconds,omitempty"`
+    PeriodSeconds float64 `json:"periodSeconds,omitempty"`
+    SuccessThreshold float64 `json:"successThreshold,omitempty"`
+    FailureThreshold float64 `json:"failureThreshold,omitempty"`
 }
 
 type execLiveProbeType struct {
-    Command []string `json:"command"` 
+    Command []string `json:"command,omitempty"` 
 }
 
 type httpGetLiveProbeType struct {
-    Path string `json:"path"`
-    Port float64 `json:"port"`
-    Host string `json:"host"`
-    Scheme string `json:"scheme"`
-    HttpHeaders []headersGLPType `json:"httpHeaders"`    
+    Path string `json:"path,omitempty"`
+    Port float64 `json:"port,omitempty"`
+    Host string `json:"host,omitempty"`
+    Scheme string `json:"scheme,omitempty"`
+    HttpHeaders []headersGLPType `json:"httpHeaders,omitempty"`    
 }
 
 type headersGLPType struct {
-    Name string `json:"name"`
-    Value string `json:"value"`
+    Name string `json:"name,omitempty"`
+    Value string `json:"value,omitempty"`
 }
 
 type tcpLiveProbeType struct {
-    Port float64 `json:"port"`
+    Port float64 `json:"port,omitempty"`
 }
 
 type readinessProbeContainer struct {
-    HttpGet httpGetReadProbeType `json:"httpGet"`
-    InitialDelaySeconds float64 `json:"initialDelaySeconds"`
-    TimeoutSeconds float64 `json:"timeoutSeconds"`
-    PeriodSeconds float64 `json:"periodSeconds"`
-    SuccessThreshold float64 `json:"successThreshold"`
-    FailureThreshold float64 `json:"failureThreshold"`
+    HttpGet *httpGetReadProbeType `json:"httpGet,omitempty"`
+    InitialDelaySeconds float64 `json:"initialDelaySeconds,omitempty"`
+    TimeoutSeconds float64 `json:"timeoutSeconds,omitempty"`
+    PeriodSeconds float64 `json:"periodSeconds,omitempty"`
+    SuccessThreshold float64 `json:"successThreshold,omitempty"`
+    FailureThreshold float64 `json:"failureThreshold,omitempty"`
 }
 
 
 type httpGetReadProbeType struct {
-    Path string `json:"path"`
-    Port float64 `json:"port"`
-    Host string `json:"host"`
-    Scheme string `json:"scheme"`
-    HttpHeaders []headersGRPType `json:"httpHeaders"`    
+    Path string `json:"path,omitempty"`
+    Port float64 `json:"port,omitempty"`
+    Host string `json:"host,omitempty"`
+    Scheme string `json:"scheme,omitempty"`
+    HttpHeaders []headersGRPType `json:"httpHeaders,omitempty"`    
 }
 
 type headersGRPType struct {
@@ -177,8 +177,8 @@ type headersGRPType struct {
 
 
 type lifecycleContainer struct {
-    PostStart postStartLCType `json:"postStart"`
-    PreStop preStopLCType `json:"preStop"`    
+    PostStart *postStartLCType `json:"postStart,omitempty"`
+    PreStop *preStopLCType `json:"preStop,omitempty"`    
 }
 
 type postStartLCType struct {
@@ -188,9 +188,6 @@ type postStartLCType struct {
 type execPSLCType struct {
     Command []string `json:"command"`
 }
-
-
-
 
 type preStopLCType struct {
     Exec execPrSLCType `json:"exec"`

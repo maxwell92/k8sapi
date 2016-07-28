@@ -14,7 +14,7 @@ import (
 func Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Hello, This is k8sapi!", html.EscapeString(r.URL.Path))
 }
-/*
+
 func Get(url string) (body []byte, err error) {
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},	
@@ -40,7 +40,7 @@ func Get(url string) (body []byte, err error) {
 
 
 
-
+/*
 func Podlist(w http.ResponseWriter, r *http.Request) {
 	
 	var response []byte
@@ -48,7 +48,7 @@ func Podlist(w http.ResponseWriter, r *http.Request) {
 
 	//response, err = Get("http://172.21.1.11:8080/api/v1/pods")
 	response, err = Get("http://usa1:8080/api/v1/pods")
-/*	
+/	
 	client := &http.Client{}
 	rep, err = http.NewRequest("GET", "http://usa1:8080/api/v1/pods"
 	if err != nil {
@@ -63,7 +63,7 @@ func Podlist(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)	
 	}
 	defer response.Body.Close()
-*/
+/
 	rs, err := resolveToStruct(response)		
 	if err != nil {
 		panic(err)
@@ -96,15 +96,14 @@ func Podlist(w http.ResponseWriter, r *http.Request) {
 	
 }
 
-<<<<<<< HEAD
 func resolveToStruct(response []byte) (s *podList, err error) {
 	err = json.Unmarshal(response, &s)
 	return s, err 
 }
 
-
-
 */
+
+
 
 func Post(url string, body io.Reader) (rtn []byte, err error) {
 	tr := &http.Transport{
@@ -197,10 +196,10 @@ func appDeploy(w http.ResponseWriter, r *http.Request) {
     //io.Copy(w, bdy)
 
     var result []byte
-    result, _ = json.Marshal(tempDeploy)
+    //result, _ = json.Marshal(tempDeploy)
+    result, _ = json.MarshalIndent(tempDeploy, "", "  ") 
     
-    
-	_, err := Post("http://172.21.1.11:8080/apis/extensions/v1beta1/namespaces/default/deployments", strings.NewReader(string(result)))
+	rsp, err := Post("http://172.21.1.11:8080/apis/extensions/v1beta1/namespaces/default/deployments", strings.NewReader(string(result)))
 	if err != nil {
 		panic(err)
 		log.Println(err)
@@ -210,6 +209,8 @@ func appDeploy(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "created")
 
     fmt.Fprintln(w, string(result))
+
+    fmt.Fprintln(w, string(rsp))
 
 }
 

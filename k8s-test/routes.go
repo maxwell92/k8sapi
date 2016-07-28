@@ -35,6 +35,4 @@ var routes = Routes {
 		"/deployment",
 		appDeploy,
 	},
-
-
 }
