@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta content="yes" name="apple-mobile-web-app-capable">
+	<meta content="black" name="apple-mobile-web-app-status-bar-style">
+	<meta content="telephone=no" name="format-detection">
+	<meta content="email=no" name="format-detection">
+	<title>标题</title>
+	<script>
+	;(function(d,w){
+		function hg()
+		{
+			var hs=document.documentElement.clientWidth;
+			var hsd=hs/10;
+			document.documentElement.style.fontSize=hsd+"px";
+		}
+		hg()
+	})(document,window);
+	</script>
+	<link rel="stylesheet" type="text/css" href="./css/animate.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/index.css">
+	<style>
+	*{
+		box-sizing:border-box;
+	}
+	html,body{
+		height:100%;
+		width:10rem;
+	}
+    #uls{
+        padding-left:150px; 
+    }
+    #uls li{
+        padding: 0 15px;
+        margin: 15px;
+    }
+    span{
+        background: #CCC;
+        display: block;
+        border: 1px #000 solid;
+        padding: 0 5px;
+        float: left;
+        margin: 0 15px;
+    }
+    a{
+        background: #CCC;
+        display: block;
+        border: 1px #000 solid;
+        padding: 0 5px;
+        float: left;
+        margin: 0 15px;
+    }
+	</style>
+</head>
+<body>
+   <h1>跨域</h1>
+    <div class="loads"></div>
+    <input type="text" id="ipus">
+    <input type='text' id='xsdqpage' />
+    <ul id="uls">
+    <img src="">
+    </ul>
+    <div class="as"></div>
+	<script src="./js/jquery.js"></script>
+	<script>
+	;(function($){
+        //渲染
+        $("#ipus").on("blur",function(){
+            var bookname=$(this).val();
+            $.ajax({
+           /* url:"http://127.0.0.1/html5two/ajax/data.php",*/
+            url:"data.json",
+            type:"POST",
+            data:{q:bookname},
+            dataType:"json",
+            beforeSend:function(){
+                $(".loads").text("正在加载中。。。。。。。。。。。。。。。。。。。");
+            },
+            success:function(data){
+                var othml="";
+                $.each(data.books,function(i,v){
+                   othml+="<li>"+v.rating.max+"<img src="+v.images.small+"></li>"
+                });
+                $("#uls").html(othml);
+                fenye()
+            },
+            error:function(){
+                alert("请求失败");
+            }
+        })
+                
+                
+                
+        })
+        //分页
+        $('#xsdqpage').val(1);
+        function fenye(){
+            var meiyegeshu=5;
+            var zongshu=$("#uls").children().size();
+            var zongyeshu=Math.ceil(zongshu/meiyegeshu);
+                $('#xsdqpage').val(1);
+
+            var dangqianye=0;
+           
+            var diva='<span id="spage" class="weidainji">上一页</span>';
+            while( zongyeshu > dangqianye )
+            {
+                diva+='<a id="spage" class="weidainji">'+(dangqianye+1)+'</a>';
+                dangqianye++;  
+            }
+            diva+='<span id="xpage" class="weidainji">下一页</span>';
+            $(".as").html(diva);
+            $('.as a').eq(0).css("background","red").siblings().css("background","#CCC");
+            $("#uls").children("li").hide().slice(0,5).show()
+             
+            $(".as a").on("click",function(){
+                inde=parseInt($(this).index())
+                ys=parseInt($(this).index()-1)
+                sxpage(inde,ys)
+            })
+            $("#spage").on("click",function(){
+                inde=parseInt($('#xsdqpage').val())-1
+                ys=parseInt($('#xsdqpage').val())-2
+                if(inde<1)
+                {
+                    inde=zongyeshu;
+                    ys=zongyeshu-1;
+                }
+                 sxpage(inde,ys)
+            })
+           $("#xpage").on("click",function(){
+                
+                inde=parseInt($('#xsdqpage').val())+1
+                ys=parseInt($('#xsdqpage').val())
+                if(inde>zongyeshu)
+                {
+                    inde=1;
+                    ys=0;
+                }
+                 sxpage(inde,ys)
+            })
+            function sxpage(indes,yes){
+                qishi=(indes-1)*5;
+                jieshuye=indes*5;
+                $('#xsdqpage').val(indes);
+                $("#uls").children("li").hide().slice(qishi,jieshuye).show()
+                $('.as a').eq(yes).css("background","red").siblings().css("background","#CCC");
+                
+            }       
+            
+        }
+	})(jQuery);
+	</script>
+</body>
+</html>

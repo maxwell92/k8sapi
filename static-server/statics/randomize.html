@@ -1,0 +1,95 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>miss you 99</title>
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<style>
+		*{
+			margin: 0 ;padding: 0;text-align: center;
+			font-size: 16px;
+		}
+		body{			
+			background: #eaeeaf;
+		}
+		.randomize-wrap{
+			width: 100%;height: 100%;
+			padding-top: 5rem;
+		}
+		#randomizetext1{
+			width: 40%;
+			height: 2rem;
+			border: 1px solid #aaa;
+			margin-left: 30%;
+			line-height: 2rem;
+			color: #aaa;
+		}
+		.randomize-wrap button{
+			width: 9rem;height: 2.2rem;
+			font-size: 1rem;
+			color: #fff;
+			background: #40ba49;
+			border: none;
+			border-radius: 0.2rem;
+			margin: 2rem 0 1rem 0;
+		}
+		.randomize-wrap p{
+			color: #40ba49;
+			line-height: 2.2rem;
+		}
+		.randomize-wrap input{
+			width: 50%;
+			height: 2.2rem;
+		}
+	</style>
+</head>
+<body>
+	<div class="randomize-wrap">
+		<p id="randomizetext1">biding....</p>
+		<button id="randomizebegin">开始选择</button> <button id="randomizestop">暂停</button>
+		<p>您可以手动输入数据，英文逗号隔开</p>
+		<p><input type="text" id="randomizetext2"></p>
+		<button id="randomizechange">更改</button>
+	</div>	
+	<script>
+		var randomizetext1=document.getElementById('randomizetext1'),
+			randomizebegin=document.getElementById('randomizebegin'),
+			randomizestop=document.getElementById('randomizestop'),
+			randomizetext2=document.getElementById('randomizetext2'),
+			randomizechange=document.getElementById('randomizechange'),
+			arr=["红枣","鸭梨","山茶","枸杞","蛇酒","天麻","山药","蝉"];
+		var i=0;
+		function auto(){
+			randomizetext1.innerHTML=arr[i];
+			i++;
+			if(i>=arr.length){
+				i=0;
+			}
+		}
+		// 开始按钮
+		randomizebegin.onclick=function(){
+			s1=setInterval(auto,300);
+			randomizebegin.disabled=true;
+			randomizebegin.style.background="#ccc";
+			randomizestop.style.background="#40ba49";
+		}
+		// 暂停按钮
+		randomizestop.onclick=function(){
+			clearInterval(s1);
+			randomizebegin.disabled=false;
+			randomizebegin.style.background="#40ba49";
+			randomizestop.style.background="#ccc";
+		}
+		// 更改按钮
+		randomizechange.onclick=function(){
+			clearInterval(s1);
+			arr=randomizetext2.value.split(",");
+			randomizebegin.style.background="#40ba49";
+			randomizestop.style.background="#40ba49";
+		}
+
+
+
+	</script>
+</body>
+</html>

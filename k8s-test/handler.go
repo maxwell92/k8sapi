@@ -46,17 +46,30 @@ func Podlist(w http.ResponseWriter, r *http.Request) {
 	var response []byte
 	var err error
 
-	response, err = Get("http://172.21.1.11:8080/api/v1/pods")
+	//response, err = Get("http://172.21.1.11:8080/api/v1/pods")
+	response, err = Get("http://usa1:8080/api/v1/pods")
+/*	
+	client := &http.Client{}
+	rep, err = http.NewRequest("GET", "http://usa1:8080/api/v1/pods"
 	if err != nil {
 		panic(err)
 		log.Println(err)	
 	}
 		
+	rep.Header.Add("Access-Control-Allow-Origin", "*")
+	response, err := client.Do(req)
+	if err != nil {
+		panic(err)
+		log.Println(err)	
+	}
+	defer response.Body.Close()
+*/
 	rs, err := resolveToStruct(response)		
 	if err != nil {
 		panic(err)
 		log.Println(err)
 	}
+
 
     num := len(rs.Items) 
 
@@ -75,12 +88,15 @@ func Podlist(w http.ResponseWriter, r *http.Request) {
         applist[i].Replicas = 3
         applist[i].Worktime = rs.Items[i].Metadata.CreationTimeStamp
     }
-
 		
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 	json.NewEncoder(w).Encode(applist)
-    
+	
 }
 
+<<<<<<< HEAD
 func resolveToStruct(response []byte) (s *podList, err error) {
 	err = json.Unmarshal(response, &s)
 	return s, err 
@@ -196,3 +212,4 @@ func appDeploy(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintln(w, string(result))
 
 }
+
