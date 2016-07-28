@@ -52,7 +52,7 @@ func Podlist(w http.ResponseWriter, r *http.Request) {
 	var response []byte
 	var err error
 
-	response, err = Get("http://usa1:8080/api/v1/pods")
+	response, err = Get("http://172.21.1.11:8080/api/v1/pods")
 	if err != nil {
 		panic(err)
 		log.Println(err)	
@@ -105,7 +105,7 @@ func Podetails(w http.ResponseWriter, r *http.Request) {
 	var response []byte
 	var err error
 
-	response, err = Get("http://usa1:8080/api/v1/pods")
+	response, err = Get("http://172.21.1.11:8080/api/v1/pods")
 	if err != nil {
 		panic(err)
 		log.Println(err)	
@@ -155,7 +155,7 @@ func delPod(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Pod [", podname, "] Details: ")
 
 	
-	req, err := http.NewRequest("DELETE", "http://usa1:8080/api/v1/namespaces/default/pods/"+podname, nil)
+	req, err := http.NewRequest("DELETE", "http://172.21.1.11:8080/api/v1/namespaces/default/pods/"+podname, nil)
 	if err != nil {
 		log.Println(err)
 		panic(err)
@@ -171,7 +171,7 @@ func delPod(w http.ResponseWriter, r *http.Request) {
 /*	var response []byte
 	var err error
 
-	response, err = Get("http://usa1:8080/api/v1/pods")
+	response, err = Get("http://172.21.1.11:8080/api/v1/pods")
 	if err != nil {
 		panic(err)
 		log.Println(err)	
