@@ -7,24 +7,163 @@
 <meta content="black" name="apple-mobile-web-app-status-bar-style">
 <meta content="telephone=no" name="format-detection">
 <meta content="email=no" name="format-detection">
-<link rel="stylesheet" type="text/css" href="css/index.css">
-<title>yeepay</title>
+<link rel="stylesheet" type="text/css" href="template/css/index.css">
+<link rel="stylesheet" href="template/css/font-awesome.min.css">
+<title>标题</title>
 </head>
 
 <body>
-	<div class="wrap-gl">
+<nav>
+    <img src="template/images/logo.png">
+    <b class="fa icon-reorder"></b>
+    <b class="fa icon-envelope"></b>
+    <b class="fa icon-bell-alt"></b>
+    <b class="fa icon-search"></b>
+    <span class="yp-nav-span">
+        <img src="template/images/photo.jpg">
+        <details>
+            <summary>Copyright 2011.</summary>
+            <span>
+                <p><i class="fa icon-wrench"></i>Settings</p>
+                <p><i class="fa icon-user"></i>Profile</p>
+                <p><i class="fa icon-lock"></i>Help</p>
+                <p><i class="fa icon-exclamation-sign"></i>Logout</p>
+            </span>
+        </details>
+        <i class="fa icon-comments"></i>
+    </span>
 
-		<div class="wrap-span">
-			<span>应用名称</span><span>标签组合</span><span>数据中心</span><span>副本个数</span><span>运行时间</span><span>操作</span>
-		</div>
+</nav>
+<div class="yp-wrap">
+    
+    <div class="yp-leftbox">
+        <dl>
+            <dt><img src="template/images/photo.jpg"></dt>
+            <dd>
+                <p><h3>David Lee</h3></p>
+                <p><span>web Developer</span></p>
+            </dd>
+        </dl>
+        <ul class="yp-leftbox-uls">
 
-		<table class="tables" id="uls" cellspacing="0"></table>
+            <li>
+                <a href="#">
+                    <i class="fa icon-dashboard"></i>
+                    Dashboard
+                </a>
+            </li>
 
-	</div>
+
+            <li>
+                <a href="#">
+                    <i class="fa icon-suitcase"></i>
+                    应用管理
+                    <b class="fa icon-angle-left"></b> 
+                    <span>TOP</span>
+                </a>
+                <ul>
+                    <li> <a href="#">查看应用列表 </a></li>
+                    <li> <a href="#">发布应用 </a></li>
+                    <li> <a href="#">回滚 </a></li>
+                    <li> <a href="#">滚动升级 </a></li>
+                    <li> <a href="#">撤销发布 </a></li>
+                </ul>
+            </li>
 
 
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/index.js"></script>
+
+            <li>
+                <a href="#">
+                    <i class="fa icon-road"></i>
+                    扩展功能
+                    <b class="fa icon-angle-left"></b> 
+                    <span>TOP</span>
+                </a>
+                <ul>
+                    <li> <a href="#">服务管理 </a></li>
+                    <li> <a href="#">访问点管理 </a></li>
+                </ul>
+            </li>
+
+
+            <li>
+                <a href="#">
+                    <i class="fa icon-cloud"></i>
+                    云盘管理
+                    <b class="fa icon-angle-left"></b> 
+                    <span>TOP</span>
+                </a>
+                <ul>
+                    <li> <a href="#">创建云盘 </a></li>
+                    <li> <a href="#">查看云盘 </a></li>
+                </ul>
+            </li>
+
+
+            <li>
+                <a href="#">
+                    <i class="fa icon-cog"></i>
+                    账户设置
+                    <b class="fa icon-angle-left"></b> 
+                    <span>TOP</span>
+                </a>
+                <ul>
+                    <li> <a href="#">修改密码 </a></li>
+                    <li> <a href="#">查看信息 </a></li>
+                </ul>
+            </li>
+
+
+            <li>
+                <a href="#">
+                    <i class="fa icon-jpy"></i>
+                    充值
+                </a>
+            </li>
+
+        </ul>
+        
+    </div>
+    
+    <div class="yy-conten" ui-view>
+
+        <div class="yp-conten-nav">
+            <input type="text" />
+            <b class="fa icon-search"></b>
+            <b class="fa icon-plus-sign-alt"></b>
+        </div>
+    
+        <div class="tp-table-wrap">
+            <div class="apple-span">
+    			<span>应用名称</span><span>标签组合</span><span>数据中心</span><span>副本个数</span><span>运行时间</span><span>操作</span>
+    		</div>
+            
+            <table class="box" cellspacing="0">  </table>
+
+            <span style="cursor:pointer;margin-right:10px;" class="prev">上一页</span>
+            <span style="cursor:pointer;margin-right:10px;" class="first">第一页</span>
+            <span style="cursor:pointer;margin-right:10px;" class="last">最后一页</span>
+            <span style="cursor:pointer;margin-right:10px;" class="next">下一页</span>
+        </div>
+            
+    </div>
+
+</div>
+
+
+
+<script src="template/js/jquery.js"></script>
+<script src="template/js/index.js"></script>
+
+
+
 </body>
 
 </html>
+
+
+
+
+
+
+

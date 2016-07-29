@@ -85,7 +85,7 @@ func appDeploy(w http.ResponseWriter, r *http.Request) {
 
     fmt.Println("method:", r.Method)
     if r.Method == "GET" {
-        t, _ := template.ParseFiles("statics/appdeploy.html")
+        t, _ := template.ParseFiles("template/html/appdeploy.html")
         //t.Execute(w, token) //used for session keep
         t.Execute(w, nil)
         
@@ -163,11 +163,22 @@ func appDeploy(w http.ResponseWriter, r *http.Request) {
 }
 
 
+func getApplist(w http.ResponseWriter, r *http.Request) {
+
+    if r.Method == "GET" {
+        t, err := template.ParseFiles("template/html/index.html")
+        if err != nil {
+            return 
+        }
+        err = t.Execute(w, nil)
+    
+    }
+
+
+}
+
 func appList(w http.ResponseWriter, r *http.Request) {
-	
-
-
-	var response []byte
+    var response []byte
 	var err error
 
 	response, err = Get("http://172.21.1.11:8080/api/v1/pods")
@@ -211,11 +222,16 @@ func appList(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintln(w, string(result))	
 }
 
+func StaticServer(prefix string, staticDir string) {
+    http.Handle(prefix, http.StripPrefix(prefix, http.FileServer(http.Dir(staticDir))))
+    return 
+}
 
 func main() {
-    //http.HandleFunc("/", sayhelloName)
-	http.Handle("/", http.FileServer(http.Dir("statics")))
+    StaticServer("/template/", "./template")
     http.HandleFunc("/applist", appList)
+    http.HandleFunc("/", sayhelloName)
+    http.HandleFunc("/getapplist", getApplist)
     http.HandleFunc("/appdeploy", appDeploy)
 
     err := http.ListenAndServe(":10000", nil)
