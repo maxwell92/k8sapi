@@ -1,0 +1,58 @@
+*{
+	margin: 0;padding: 0;
+}
+.wrap-gl{
+	width: 100%;
+	height: 100%;
+	background: #ccc;
+}
+
+.wrap-span span{
+	display: inline-block;
+	width: 16.6%;
+	height: 26px;
+	background: pink;
+	text-align: center;
+}
+
+.wrap-gl .tables{
+	width: 100%;
+	height: 100%;
+	background: #ccc;
+}
+
+
+.wrap-gl .tables tr{
+	height: 48px;
+	border-bottom: 1px solid red;
+}
+
+.wrap-gl .tables tr td{
+	width: 16.6%;
+	text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

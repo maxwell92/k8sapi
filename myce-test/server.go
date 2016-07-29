@@ -85,7 +85,7 @@ func appDeploy(w http.ResponseWriter, r *http.Request) {
 
     fmt.Println("method:", r.Method)
     if r.Method == "GET" {
-        t, _ := template.ParseFiles("appdeploy.html")
+        t, _ := template.ParseFiles("statics/appdeploy.html")
         //t.Execute(w, token) //used for session keep
         t.Execute(w, nil)
         
@@ -165,6 +165,8 @@ func appDeploy(w http.ResponseWriter, r *http.Request) {
 
 func appList(w http.ResponseWriter, r *http.Request) {
 	
+
+
 	var response []byte
 	var err error
 
@@ -211,7 +213,8 @@ func appList(w http.ResponseWriter, r *http.Request) {
 
 
 func main() {
-    http.HandleFunc("/", sayhelloName)
+    //http.HandleFunc("/", sayhelloName)
+	http.Handle("/", http.FileServer(http.Dir("statics")))
     http.HandleFunc("/applist", appList)
     http.HandleFunc("/appdeploy", appDeploy)
 

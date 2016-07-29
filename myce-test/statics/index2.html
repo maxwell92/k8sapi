@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta content="yes" name="apple-mobile-web-app-capable">
+	<meta content="black" name="apple-mobile-web-app-status-bar-style">
+	<meta content="telephone=no" name="format-detection">
+	<meta content="email=no" name="format-detection">
+	<title>标题</title>
+	<script>
+	;(function(d,w){
+		function hg()
+		{
+			var hs=document.documentElement.clientWidth;
+			var hsd=hs/10;
+			document.documentElement.style.fontSize=hsd+"px";
+		}
+		hg()
+	})(document,window);
+	</script>
+	<link rel="stylesheet" type="text/css" href="./css/animate.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/index.css">
+	<style>
+	*{
+		box-sizing:border-box;
+	}
+	html,body{
+		height:100%;
+		width:10rem;
+	}
+    #uls{
+        padding-left:150px; 
+    }
+    #uls li{
+        padding: 0 15px;
+    }
+    .weidianji{
+        background: #CCC;
+        display: block;
+        border: 1px #000 solid;
+        padding: 0 5px;
+    }
+	</style>
+</head>
+<body>
+   <h1>跨域</h1>
+    <div class="loads"></div>
+    <input type="text" id="ipus">
+    <input type='text' id='dangqianpage' />
+    <ul id="uls">
+    <img src="">
+    </ul>
+    <div class="as"></div>
+	<script src="./js/jquery.js"></script>
+	<script>
+	;(function($){
+        $("#ipus").on("blur",function(){
+            var bookname=$(this).val();
+            $.ajax({
+           /* url:"http://127.0.0.1/html5two/ajax/data.php",*/
+            url:"data.json",
+            type:"POST",
+            data:{q:bookname},
+            dataType:"json",
+            beforeSend:function(){
+                $(".loads").text("正在加载中。。。。。。。。。。。。。。。。。。。");
+            },
+            success:function(data){
+                var othml="";
+                $.each(data.books,function(i,v){
+                   othml+="<li>"+v.rating.max+"<img src="+v.images.small+"></li>"
+                });
+                $("#uls").html(othml);
+                fenye()
+            },
+            error:function(){
+                alert("请求失败");
+            }
+        })
+                
+                
+                
+        })
+        
+        function fenye(){
+            var meiyegeshu=5;
+            var zongshu=$("#uls").children().size()
+            var zongyeshu= Math.ceil(zongyeshu/meiyegeshu)
+            var diva='<a class="weidainji" href=""></a>'
+        }
+	})(jQuery);
+	</script>
+</body>
+</html>

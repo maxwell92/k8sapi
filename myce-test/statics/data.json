@@ -1,0 +1,35 @@
+{
+	"yeepay": [
+		{
+			"Healthz": {
+				"PodsAvailable": "all"
+			},
+			"Name": "myapp",
+			"Label": {
+					"appversion": "v1.0"
+			},
+			"Datacenter": [
+				"Shijihulian",
+				"Dianxin"
+			],
+			"Replicas": "3",
+			"Worktime": "1h3min"
+		},
+		{
+			"Healthz": {
+				"PodsAvailable": "all--1"
+			},
+			"Name": "myapp--1",
+			"Label": {
+					"appname": "myapp--1",
+					"appversion": "v1.0--1"
+			},
+			"Datacenter": [
+				"Shijihulian--1",
+				"Dianxin--1"
+			],
+			"Replicas": "3--1",
+			"Worktime": "1h3min--1"
+		}
+	]
+}
