@@ -232,7 +232,7 @@ func rsList(w http.ResponseWriter, r *http.Request) {
     var response []byte
 	var err error
 
-    response, err = Get("/apis/extensions/v1beta1/namespaces/default/replicasets")
+    response, err = Get("http://master:8080/apis/extensions/v1beta1/namespaces/default/replicasets")
 
 	var rs appreplicaset.ReplicaSet 
     err = json.Unmarshal(response, &rs)
@@ -249,12 +249,24 @@ func rsList(w http.ResponseWriter, r *http.Request) {
         dc = make([]string, 1)
         dc[0] = "shijilulian"
 
-        applist[i].Healthz.PodsAvailable = "all"
+        var healthz []string
+        healthz = make([]string, 3)
+        healthz[0] = "all"
+        healthz[1] = "partial"
+        healthz[2] = "none"
+    
+        if rs.Items[i].Status.Replicas == 0 || rs.Items[i].Status.FullyLabeledReplicas == 0 {
+            applist[i].Healthz.PodsAvailable = healthz[2] 
+        } else if rs.Items[i].Status.Replicas > rs.Items[i].Status.FullyLabeledReplicas {
+            applist[i].Healthz.PodsAvailable = healthz[1]
+        } else {
+            applist[i].Healthz.PodsAvailable = healthz[0]
+        }
         applist[i].Name = rs.Items[i].Metadata.Name 
         applist[i].Label = rs.Items[i].Metadata.Labels
         applist[i].Datacenter = dc 
         applist[i].Replicas = rs.Items[i].Status.Replicas 
-        applist[i].Worktime = rs.Items[i].Metadata.CreationTimeStamp
+        applist[i].Worktime = rs.Items[i].Metadata.CreationTimestamp
     }
 		
 	//json.NewEncoder(w).Encode(applist)
@@ -271,7 +283,7 @@ func main() {
     http.HandleFunc("/", sayhelloName)
     http.HandleFunc("/getapplist", getApplist)
     http.HandleFunc("/appdeploy", appDeploy)
-    http.HandleFunc("/rslist, rsList)
+    http.HandleFunc("/rslist", rsList)
 
     err := http.ListenAndServe(":10000", nil)
     if err != nil {

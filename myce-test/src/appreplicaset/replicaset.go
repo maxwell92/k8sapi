@@ -37,7 +37,7 @@ type MetadataIT struct {
 }
 
 
-Type SpecType struct {
+type SpecType struct {
     Replicas float64 `json:"replicas"`
     Selector SelectorType `json:"selector"`
     Template TemplateType `json:"template"`
@@ -79,7 +79,7 @@ type SpecTemplateType struct {
     Volumes []VolumesSTT `json:"volumes"`
     Containers []ContainersSTT `json:"containers"`
     RestartPolicy string `json:"restartPolicy"`
-    TerminationGracePeriodSeconds `json:"terminationGracePeriodSeconds"`
+    TerminationGracePeriodSeconds float64 `json:"terminationGracePeriodSeconds"`
     ActiveDeadlineSeconds float64 `json:"activeDeadlineSeconds"`
     DnsPolicy string `json:"dnsPolicy"`
     NodeSelector map[string] string `json:"nodeSelector"`
@@ -293,6 +293,6 @@ type ExecPreLCCSTT struct {
 
 type StatusType struct {
     Replicas float64 `json:"replicas"`
-    FullyLabelReplicas float64 `json:"fullyLabelReplicas"`
+    FullyLabeledReplicas float64 `json:"fullyLabeledReplicas"`
     ObservedGeneration float64 `json:"observedGeneration"`    
 }
