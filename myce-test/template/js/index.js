@@ -8,8 +8,7 @@ $(document).ready(function(){
         var ohtml = "";
         $.ajax({
             type:"get",
-          //  url:"data.json",
-            url:"./applist",
+            url:"./getapplist",
             dataType:"json",
             success:function(data){
                 $(oul).empty();

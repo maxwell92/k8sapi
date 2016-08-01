@@ -164,7 +164,7 @@ func appDeploy(w http.ResponseWriter, r *http.Request) {
 }
 
 
-func getApplist(w http.ResponseWriter, r *http.Request) {
+func appList(w http.ResponseWriter, r *http.Request) {
 
     if r.Method == "GET" {
         t, err := template.ParseFiles("template/html/index.html")
@@ -178,7 +178,7 @@ func getApplist(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func appList(w http.ResponseWriter, r *http.Request) {
+func getApplist(w http.ResponseWriter, r *http.Request) {
     var response []byte
 	var err error
 
