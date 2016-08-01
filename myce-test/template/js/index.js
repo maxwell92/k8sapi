@@ -9,7 +9,7 @@ $(document).ready(function(){
         $.ajax({
             type:"get",
           //  url:"data.json",
-            url:"http://localhost:10000/applist",
+            url:"./applist",
             dataType:"json",
             success:function(data){
                 $(oul).empty();
