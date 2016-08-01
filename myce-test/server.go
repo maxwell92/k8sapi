@@ -12,6 +12,7 @@ import (
     "io/ioutil"
     "applist"
     "appdeploy"
+    "appreplicaset"
 )
 
 func Get(url string) (body []byte, err error) {
@@ -227,12 +228,50 @@ func StaticServer(prefix string, staticDir string) {
     return 
 }
 
+func rsList(w http.ResponseWriter, r *http.Request) {
+    var response []byte
+	var err error
+
+    response, err = Get("/apis/extensions/v1beta1/namespaces/default/replicasets")
+
+	var rs appreplicaset.ReplicaSet 
+    err = json.Unmarshal(response, &rs)
+    if err != nil {
+        log.Println(err)
+    }
+    num := len(rs.Items) 
+    fmt.Println(num)
+
+	applist := make(applist.AppListType, num)
+
+	for i := 0; i < len(rs.Items); i++ {
+        var dc []string
+        dc = make([]string, 1)
+        dc[0] = "shijilulian"
+
+        applist[i].Healthz.PodsAvailable = "all"
+        applist[i].Name = rs.Items[i].Metadata.Name 
+        applist[i].Label = rs.Items[i].Metadata.Labels
+        applist[i].Datacenter = dc 
+        applist[i].Replicas = rs.Items[i].Status.Replicas 
+        applist[i].Worktime = rs.Items[i].Metadata.CreationTimeStamp
+    }
+		
+	//json.NewEncoder(w).Encode(applist)
+    result, _ := json.MarshalIndent(applist, "", "   ")
+    fmt.Fprintln(w, string(result))	
+}
+
+
+
+
 func main() {
     StaticServer("/template/", "./template")
     http.HandleFunc("/applist", appList)
     http.HandleFunc("/", sayhelloName)
     http.HandleFunc("/getapplist", getApplist)
     http.HandleFunc("/appdeploy", appDeploy)
+    http.HandleFunc("/rslist, rsList)
 
     err := http.ListenAndServe(":10000", nil)
     if err != nil {
