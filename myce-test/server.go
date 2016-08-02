@@ -13,6 +13,7 @@ import (
     "applist"
     "appdeploy"
     "appreplicaset"
+    "namespace"
 )
 
 func Get(url string) (body []byte, err error) {
@@ -275,6 +276,49 @@ func rsList(w http.ResponseWriter, r *http.Request) {
 }
 
 
+func nsList(w http.ResponseWriter, r *http.Request) {
+    var response []byte
+	var err error
+
+    response, err = Get("http://master:8080/api/v1/namespaces")
+
+	var rs namespace.NamespaceList
+    err = json.Unmarshal(response, &rs)
+    if err != nil {
+        log.Println(err)
+    }
+    num := len(rs.Items) 
+    fmt.Println(num)
+    
+    for i := 0; i < num; i++ {
+        fmt.Fprintln(w, rs.Items[i].Metadata.Name) 
+        fmt.Fprintln(w, rs.Items[i].Spec.Finalizers)
+    } 
+}
+
+func postNs(w http.ResponseWriter, r *http.Request) {
+    ns := new(namespace.Namespace) 
+    ns.Kind = "Namespace"
+    ns.ApiVersion = "v1"
+    ns.Metadata.Name = "ns-test"
+   
+    labels := make(map[string] string ,1) 
+    labels["name"] = "ns-test"
+    
+    ns.Metadata.Labels = labels
+
+    var result []byte
+    result, _ = json.MarshalIndent(ns, "", "    ")
+    fmt.Fprintln(w, string(result))
+
+    rep, err := Post("http://172.21.1.11:8080/api/v1/namespaces", strings.NewReader(string(result)))
+	if err != nil {
+        log.Println(err)
+	}
+
+    fmt.Fprintln(w, string(rep))
+
+}
 
 
 func main() {
@@ -284,6 +328,8 @@ func main() {
     http.HandleFunc("/getapplist", getApplist)
     http.HandleFunc("/appdeploy", appDeploy)
     http.HandleFunc("/rslist", rsList)
+    http.HandleFunc("/nslist", nsList)
+    http.HandleFunc("/postns", postNs)
 
     err := http.ListenAndServe(":10000", nil)
     if err != nil {

@@ -19,8 +19,8 @@ type ItemsListType Namespace
 type Namespace struct {
     Kind string `json:"kind"`
     ApiVersion string `json:"apiVersion"`
-    Metadata *MetadataType `json:"metadata"`
-    Spec *SpecType `json:"spec"`
+    Metadata MetadataType `json:"metadata"`
+    Spec SpecType `json:"spec"`
     Status *StatusType `json:"status,omitempty"`
 }
 
