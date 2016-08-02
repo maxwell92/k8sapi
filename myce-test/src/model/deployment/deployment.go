@@ -48,7 +48,8 @@ type MetadataTSDL struct {
 
 type SpecTSDL struct {
     Volumes []VolumesSTSDL `json:"volumes,omitempty"`
-    Containers []ContainersSTSDL `json:"containers"` 
+    //Containers []ContainersSTSDL `json:"containers"` 
+    Containers []ContainerType `json:"containers"` 
 }
 
 type VolumesSTSDL struct {
@@ -98,7 +99,6 @@ type ItemsConfigMap struct {
     Path string `json:"Path"`
 }
 
-type ContainerType ContainersSTSDL    
 
 type ContainersSTSDL struct {
     Name string `json:"name"`
@@ -114,6 +114,9 @@ type ContainersSTSDL struct {
     Lifecycle *LifecycleContainer `json:"lifecycle,omitempty"`
  
 }
+
+
+type ContainerType ContainersSTSDL    
 
 type PortContainer struct {
     Name string `json:"name"`
