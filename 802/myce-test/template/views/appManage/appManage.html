@@ -1,0 +1,84 @@
+<section class="wrapper main-wrapper row" style="">
+    <div class="col-lg-12">
+        <section class="box ">
+            <header class="panel_header">
+                <h2 class="title pull-left">应用管理</h2>
+
+                <div class="actions panel_actions pull-right">
+                    <a class="box_toggle fa fa-chevron-down"></a>
+                    <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
+                    <a class="box_close fa fa-times"></a>
+                </div>
+            </header>
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="example_wrapper" class="dataTables_wrapper form-inline no-footer">
+                            <div class="row">
+                                <div class="col-md-3 pull-right">
+                                    <div id="example_filter" class="dataTables_filter">
+                                        <label>
+                                            Search:<input type="search" class="form-control input-sm input-medium" placeholder="" aria-controls="example">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <table id="appList" class="display table table-hover table-condensed dataTable no-footer appList-table"
+                                   role="grid" aria-describedby="example_info">
+                                <thead>
+                                    <tr role="row">
+                                        <th class="sorting_disabled" rowspan="1" colspan="1" aria-label="ID">ID</th>
+                                        <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1">应用名称</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1">标签组合</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1">数据中心</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1">副本个数</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1">运行时长</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1">操作</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    <tr role="row" ng-class="{odd:$odd,even:$even}" ng-repeat="app in appList">
+                                        <td>{{app.id}}</td>
+                                        <td class="sorting_1">{{app.Name}}</td>
+                                        <td>{{app.Label}}</td>
+                                        <td>{{app.Datacenter}}</td>
+                                        <td>{{app.Replicas}}</td>
+                                        <td>{{app.Worktime}}</td>
+                                        <td><a>滚动升级</a><a>回滚</a><a>撤销</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="dataTables_paginate paging_bootstrap" id="example_paginate">
+                                        <ul class="pagination pull-right">
+                                            <li class="prev disabled"><a href="#"><i
+                                                    class="fa fa-angle-double-left"></i></a></li>
+                                            <li class="active"><a href="#">1</a></li>
+                                            <li><a href="#">2</a></li>
+                                            <li><a href="#">3</a></li>
+                                            <li><a href="#">4</a></li>
+                                            <li><a href="#">5</a></li>
+                                            <li class="next"><a href="#"><i class="fa fa-angle-double-right"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="dataTables_info" id="example_info" role="status" aria-live="polite">
+                                        Showing 1 to 10 of 50 entries
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ********************************************** -->
+
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+</section>
