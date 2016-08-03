@@ -9,6 +9,7 @@ import (
 	endpointc "controller/endpoint"
 	namespacec "controller/namespace"
 	podc "controller/pod"
+	replicasetc "controller/replicaset"
 )
 
 func sayhelloName(w http.ResponseWriter, r *http.Request) {
@@ -71,6 +72,20 @@ func Pod(w http.ResponseWriter, r *http.Request) {
 	pc.Get("http://master:8080/api/v1/namespaces/default/pods")
 
 }
+func ReplicaSet(w http.ResponseWriter, r *http.Request) {
+	var rc replicasetc.ReplicaSetController
+
+	rc.Get("http://master:8080/apis/extensions/v1beta1/namespaces/default/replicasets")
+
+	rc.Post("http://master:8080/apis/extensions/v1beta1/namespaces/default/replicasets")
+
+	rc.Get("http://master:8080/apis/extensions/v1beta1/namespaces/default/replicasets")
+
+	rc.Delete("http://master:8080/apis/extensions/v1beta1/namespaces/default/replicasets/nginx-rs-test")
+
+	rc.Get("http://master:8080/apis/extensions/v1beta1/namespaces/default/replicasets")
+
+}
 func main() {
 
 	http.HandleFunc("/", sayhelloName)
@@ -78,6 +93,7 @@ func main() {
 	http.HandleFunc("/endpoint", Endpoint)
 	http.HandleFunc("/namespace", Namespace)
 	http.HandleFunc("/pod", Pod)
+	http.HandleFunc("/replicaset", ReplicaSet)
 	err := http.ListenAndServe(":10000", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe:", err)
