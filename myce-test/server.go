@@ -10,6 +10,7 @@ import (
 	namespacec "controller/namespace"
 	podc "controller/pod"
 	replicasetc "controller/replicaset"
+	servicec "controller/service"
 )
 
 func sayhelloName(w http.ResponseWriter, r *http.Request) {
@@ -86,6 +87,22 @@ func ReplicaSet(w http.ResponseWriter, r *http.Request) {
 	rc.Get("http://master:8080/apis/extensions/v1beta1/namespaces/default/replicasets")
 
 }
+
+func Service(w http.ResponseWriter, r *http.Request) {
+	var sc servicec.ServiceController
+
+	sc.Get("http://master:8080/api//v1/namespaces/default/services")
+
+	sc.Post("http://master:8080/api/v1/namespaces/default/services")
+
+	sc.Get("http://master:8080/api/v1/namespaces/default/services")
+
+	sc.Delete("http://master:8080/api/v1/namespaces/default/services/nginx-svc-test")
+
+	sc.Get("http://master:8080/api/v1/namespaces/default/services")
+
+}
+
 func main() {
 
 	http.HandleFunc("/", sayhelloName)
@@ -94,6 +111,7 @@ func main() {
 	http.HandleFunc("/namespace", Namespace)
 	http.HandleFunc("/pod", Pod)
 	http.HandleFunc("/replicaset", ReplicaSet)
+	http.HandleFunc("/service", Service)
 	err := http.ListenAndServe(":10000", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe:", err)
