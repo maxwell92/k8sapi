@@ -66,7 +66,7 @@ func Pod(w http.ResponseWriter, r *http.Request) {
 
 	pc.Get("http://master:8080/api/v1/namespaces/default/pods")
 
-	pc.Delete("http://master:8080/api/v1/namespaces/nginx-pd-test")
+	pc.Delete("http://master:8080/api/v1/namespaces/default/pods/nginx-pd-test")
 
 	pc.Get("http://master:8080/api/v1/namespaces/default/pods")
 

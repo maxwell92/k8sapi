@@ -60,6 +60,7 @@ func (pc *PodController) Post(url string) {
 	pd.Spec.Containers[0].Image = "nginx:1.7.9"
 
 	result, _ := json.MarshalIndent(pd, "", " ")
+	fmt.Println(string(result))
 	rep, err := client.Post(url, strings.NewReader(string(result)))
 	if err != nil {
 		log.Println(err)
