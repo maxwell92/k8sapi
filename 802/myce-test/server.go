@@ -1,23 +1,25 @@
 package main
+
 import (
-    "fmt"
-    "html/template"
-    "log"
-    "net/http"
-    "strings"
-    "strconv"
-    "io"
-    "encoding/json"
-    "crypto/tls"
-    "io/ioutil"
-    "applist"
-    "appdeploy"
-//    "navlist"
+	"appdeploy"
+	"applist"
+	"crypto/tls"
+	"encoding/json"
+	"fmt"
+	"html/template"
+	"io"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"strconv"
+	"strings"
+	"time"
+	//    "navlist"
 )
 
 func Get(url string) (body []byte, err error) {
 	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},	
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 
 	client := &http.Client{Transport: tr}
@@ -25,14 +27,14 @@ func Get(url string) (body []byte, err error) {
 	if err != nil {
 		log.Println(err)
 		panic(err)
-		return nil, err	
+		return nil, err
 	}
 
 	defer resp.Body.Close()
 
 	body, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err	
+		return nil, err
 	}
 
 	return body, nil
@@ -40,7 +42,7 @@ func Get(url string) (body []byte, err error) {
 
 func Post(url string, body io.Reader) (rtn []byte, err error) {
 	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},	
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 
 	client := &http.Client{Transport: tr}
@@ -49,154 +51,144 @@ func Post(url string, body io.Reader) (rtn []byte, err error) {
 	if err != nil {
 		log.Println(err)
 		panic(err)
-		return nil, err	
+		return nil, err
 	}
 
 	defer resp.Body.Close()
 
 	rtn, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err	
+		return nil, err
 	}
 	return rtn, nil
 }
 
-
 func sayhelloName(w http.ResponseWriter, r *http.Request) {
-    r.ParseForm()
-    //注意:如果没有调用ParseForm方法, 下面无法获取表单数据
-    fmt.Println(r.Form)
-    fmt.Println("path", r.URL.Path)
-    fmt.Println("scheme", r.URL.Scheme)
-    fmt.Println(r.Form["url_long"])
+	r.ParseForm()
+	//注意:如果没有调用ParseForm方法, 下面无法获取表单数据
+	fmt.Println(r.Form)
+	fmt.Println("path", r.URL.Path)
+	fmt.Println("scheme", r.URL.Scheme)
+	fmt.Println(r.Form["url_long"])
 
-    for k, v := range r.Form {
-        fmt.Println("key:", k)
-        fmt.Println("value:", strings.Join(v, ""))
-    }
+	for k, v := range r.Form {
+		fmt.Println("key:", k)
+		fmt.Println("value:", strings.Join(v, ""))
+	}
 
-    fmt.Fprintf(w, "Hello myce")
+	fmt.Fprintf(w, "Hello myce")
 
 }
-
 
 func appDeploy(w http.ResponseWriter, r *http.Request) {
-    r.ParseForm()
-    //注意:如果没有调用ParseForm方法, 下面无法获取表单数据
+	r.ParseForm()
+	//注意:如果没有调用ParseForm方法, 下面无法获取表单数据
 
-    fmt.Println("method:", r.Method)
-    if r.Method == "GET" {
-        t, _ := template.ParseFiles("template/html/appdeploy.html")
-        //t.Execute(w, token) //used for session keep
-        t.Execute(w, nil)
-        
-    } else {
-        tempDeploy := new(appdeploy.BasicDeployment)
-        tempApp := new(appdeploy.AppDeployment)
-        fmt.Println("post assign")        
-        // tempApp assignment
-        
-        r.ParseForm() 
+	fmt.Println("method:", r.Method)
+	if r.Method == "GET" {
+		t, _ := template.ParseFiles("template/html/appdeploy.html")
+		//t.Execute(w, token) //used for session keep
+		t.Execute(w, nil)
 
-        //注意:如果没有调用ParseForm方法, 下面无法获取表单数据
-        fmt.Println(r.Form)
-        fmt.Println("path", r.URL.Path)
-        fmt.Println("scheme", r.URL.Scheme)
-        fmt.Println(r.Form["url_long"])
+	} else {
+		tempDeploy := new(appdeploy.BasicDeployment)
+		tempApp := new(appdeploy.AppDeployment)
+		fmt.Println("post assign")
+		// tempApp assignment
 
+		r.ParseForm()
 
+		//注意:如果没有调用ParseForm方法, 下面无法获取表单数据
+		fmt.Println(r.Form)
+		fmt.Println("path", r.URL.Path)
+		fmt.Println("scheme", r.URL.Scheme)
+		fmt.Println(r.Form["url_long"])
 
+		fmt.Println("appname:", r.Form["appname"])
 
-        fmt.Println("appname:", r.Form["appname"])
+		tempApp.Name = r.Form.Get("appname")
+		tempApp.Namespace = r.Form.Get("namespace")
 
+		dcSlice := []string{"Shijihulian", "Dianxin", "M6"}
+		for _, v := range dcSlice {
+			if v == r.Form.Get("datacenter") {
+				//    tempApp.Datacenter = v
+			}
+		}
 
-        tempApp.Name = r.Form.Get("appname")
-        tempApp.Namespace = r.Form.Get("namespace")
+		tempApp.Image = r.Form.Get("image")
+		tmp, _ := strconv.Atoi(r.Form.Get("replicas"))
+		tempApp.Replicas = float64(tmp)
 
-        dcSlice := []string{"Shijihulian", "Dianxin", "M6"}
-        for _, v := range dcSlice {
-            if v == r.Form.Get("datacenter") {
-            //    tempApp.Datacenter = v
-            }
-        }
-   
-        tempApp.Image = r.Form.Get("image")
-        tmp, _ := strconv.Atoi(r.Form.Get("replicas"))
-        tempApp.Replicas = float64(tmp) 
+		specSlice := []string{"521M 1C", "4G 1C", "16G 8C"}
+		for _, v := range specSlice {
+			if v == r.Form.Get("spec") {
+				//tempApp.Spec = v
+			}
+		}
 
-        specSlice := []string {"521M 1C", "4G 1C", "16G 8C"}
-        for _, v := range specSlice {
-            if v == r.Form.Get("spec") {
-                //tempApp.Spec = v
-            }
-        }
-        
-        defaultlabels := make(map[string]string, 1)
-        defaultlabels["appname"] = tempApp.Name
+		defaultlabels := make(map[string]string, 1)
+		defaultlabels["appname"] = tempApp.Name
 
-        fmt.Println(tempApp)
+		fmt.Println(tempApp)
 
-        // tempDeploy assignment
-        tempDeploy.ApiVersion = "extensions/v1beta1"
-    	tempDeploy.Kind = "Deployment"
+		// tempDeploy assignment
+		tempDeploy.ApiVersion = "extensions/v1beta1"
+		tempDeploy.Kind = "Deployment"
 
-        tempDeploy.Metadata.Name = tempApp.Name
-    	tempDeploy.Spec.Replicas = tempApp.Replicas
-        tempDeploy.Spec.Template.Metadata.Labels = defaultlabels
-        tempDeploy.Spec.Template.Spec.Containers = make([]appdeploy.ContainersSTSDL, 1)
-    	tempDeploy.Spec.Template.Spec.Containers[0].Name = tempApp.Name
-        tempDeploy.Spec.Template.Spec.Containers[0].Image = tempApp.Image
+		tempDeploy.Metadata.Name = tempApp.Name
+		tempDeploy.Spec.Replicas = tempApp.Replicas
+		tempDeploy.Spec.Template.Metadata.Labels = defaultlabels
+		tempDeploy.Spec.Template.Spec.Containers = make([]appdeploy.ContainersSTSDL, 1)
+		tempDeploy.Spec.Template.Spec.Containers[0].Name = tempApp.Name
+		tempDeploy.Spec.Template.Spec.Containers[0].Image = tempApp.Image
 
+		var result []byte
+		result, _ = json.MarshalIndent(tempDeploy, "", "    ")
+		fmt.Fprintln(w, string(result))
 
-        var result []byte
-        result, _ = json.MarshalIndent(tempDeploy, "", "    ")
-        fmt.Fprintln(w, string(result))
+		rep, err := Post("http://172.21.1.11:8080/apis/extensions/v1beta1/namespaces/default/deployments", strings.NewReader(string(result)))
+		if err != nil {
+			log.Println(err)
+		}
 
-	    rep, err := Post("http://172.21.1.11:8080/apis/extensions/v1beta1/namespaces/default/deployments", strings.NewReader(string(result)))
-	    if err != nil {
-		    log.Println(err)
-	    }
+		fmt.Println(string(rep))
+		getApplist(w, r)
 
-        fmt.Println(string(rep)) 
-        getApplist(w, r)
-
-    }
+	}
 }
-
 
 func appList(w http.ResponseWriter, r *http.Request) {
 
-    if r.Method == "GET" {
-        //t, err := template.ParseFiles("template/html/index.html")
-        t, err := template.ParseFiles("template/index.html")
-        if err != nil {
-            return 
-        }
-        err = t.Execute(w, nil)
-    
-    }
+	if r.Method == "GET" {
+		//t, err := template.ParseFiles("template/html/index.html")
+		t, err := template.ParseFiles("template/index.html")
+		if err != nil {
+			return
+		}
+		err = t.Execute(w, nil)
 
+	}
 
 }
 
 func getApplist(w http.ResponseWriter, r *http.Request) {
-    var response []byte
+	var response []byte
 	var err error
 
 	response, err = Get("http://172.21.1.11:8080/api/v1/pods")
-    //defer response.Body.Close()
+	//defer response.Body.Close()
 	var rs applist.PodList
-    err = json.Unmarshal(response, &rs)
-    if err != nil {
-        log.Println(err)
-    }
-    num := len(rs.Items) 
-    fmt.Println(num)
+	err = json.Unmarshal(response, &rs)
+	if err != nil {
+		log.Println(err)
+	}
+	num := len(rs.Items)
+	fmt.Println(num)
 
-    
-    podlist := make(applist.PodlistType, 20)
+	podlist := make(applist.PodlistType, 20)
 
-    for i := 0; i < len(rs.Items); i++ {
+	for i := 0; i < len(rs.Items); i++ {
 		podlist[i].Name = rs.Items[i].Metadata.Name
 		podlist[i].Ready = rs.Items[i].Status.ContainerStatuses[0].Ready
 		podlist[i].Status = rs.Items[i].Status.Phase
@@ -207,61 +199,81 @@ func getApplist(w http.ResponseWriter, r *http.Request) {
 	applist := make(applist.AppListType, num)
 
 	for i := 0; i < len(rs.Items); i++ {
-        var dc []string
-        dc = make([]string, 1)
-        dc[0] = "shijilulian"
+		var dc []string
+		dc = make([]string, 1)
+		dc[0] = "shijilulian"
 
-        applist[i].Healthz.PodsAvailable = "all"
-        applist[i].Name = podlist[i].Name
-        applist[i].Label = rs.Items[i].Metadata.Labels
-        applist[i].Datacenter = dc 
-        applist[i].Replicas = 3
-        applist[i].Worktime = rs.Items[i].Metadata.CreationTimeStamp
-    }
-		
+		applist[i].Healthz.PodsAvailable = "all"
+		applist[i].Name = podlist[i].Name
+		applist[i].Label = rs.Items[i].Metadata.Labels
+		applist[i].Datacenter = dc
+		applist[i].Replicas = 3
+		//applist[i].Worktime = rs.Items[i].Metadata.CreationTimeStamp
+		start := rs.Items[i].Status.ContainerStatuses[0].State.Running.StartedAt
+		startTime, _ := time.Parse(time.RFC3339, start)
+		now := time.Now()
+		elapsedDuration := now.Sub(startTime)
+		hour := elapsedDuration.Hours()
+		min := elapsedDuration.Minutes()
+		sec := elapsedDuration.Seconds()
+
+		if hour > 24 {
+			applist[i].Worktime = fmt.Sprintf("%d days", int(hour/24))
+		} else if hour < 1 {
+			if min > 1 {
+				applist[i].Worktime = fmt.Sprintf("%d minutes", int(min))
+			} else {
+				applist[i].Worktime = fmt.Sprintf("%d seconds", int(sec))
+			}
+
+		} else {
+			applist[i].Worktime = fmt.Sprintf("%d hours", int(hour))
+		}
+
+	}
+
 	//json.NewEncoder(w).Encode(applist)
-    result, _ := json.MarshalIndent(applist, "", "   ")
-    fmt.Fprintln(w, string(result))	
+	result, _ := json.MarshalIndent(applist, "", "   ")
+	fmt.Fprintln(w, string(result))
 }
 
 func StaticServer(prefix string, staticDir string) {
-    http.Handle(prefix, http.StripPrefix(prefix, http.FileServer(http.Dir(staticDir))))
-    return 
+	http.Handle(prefix, http.StripPrefix(prefix, http.FileServer(http.Dir(staticDir))))
+	return
 }
 
-
 func navList(w http.ResponseWriter, r *http.Request) {
-/*
-    nl := new(navlist.Navlist)
-    nl.List = make([]navlist.ListType, 2)
-     
-    nl.List[0].Id = 1
-    nl.List[0].Name = "Dashboard"
-    nl.List[0].State = "main.dashboard" 
-    nl.List[0].IncludeState = "main.dashboard"
-    nl.List[0].ClassName = "fa-dashboard"
+	/*
+	   nl := new(navlist.Navlist)
+	   nl.List = make([]navlist.ListType, 2)
 
-    nl.List[1].Id = 2
-    nl.List[2].Name = "应用管理"
-    nl.List[2].State = "main.appManage"
-    nl.List[2].IncludeState = "main.appManage"
-    nl.List[2].ClassName = "fa-adn"
-    nl.List[2].Items = make([]navlist.ItemsType, 2)
-    nl.List[2].Items[0].Id = 22
-    nl.List[2].Items[0].Name = "发布"
-    nl.List[2].Items[0].State = "main.appManageDeployment"
-    nl.List[2].Items[0].IncludeState = "main.appManageDeployment"
-    
-    nl.List[2].Items[1].Id = 23
-    nl.List[2].Items[1].Name = "回滚"
-    nl.List[2].Items[1].State = "main.appManageRollback"
-    nl.List[2].Items[1].IncludeState = "main.appManageRollback"
+	   nl.List[0].Id = 1
+	   nl.List[0].Name = "Dashboard"
+	   nl.List[0].State = "main.dashboard"
+	   nl.List[0].IncludeState = "main.dashboard"
+	   nl.List[0].ClassName = "fa-dashboard"
 
-    result, _ := json.MarshalIndent(nl,"", " ") 
-    fmt.Fprintln(w, string(result))
-*/
+	   nl.List[1].Id = 2
+	   nl.List[2].Name = "应用管理"
+	   nl.List[2].State = "main.appManage"
+	   nl.List[2].IncludeState = "main.appManage"
+	   nl.List[2].ClassName = "fa-adn"
+	   nl.List[2].Items = make([]navlist.ItemsType, 2)
+	   nl.List[2].Items[0].Id = 22
+	   nl.List[2].Items[0].Name = "发布"
+	   nl.List[2].Items[0].State = "main.appManageDeployment"
+	   nl.List[2].Items[0].IncludeState = "main.appManageDeployment"
 
-    fmt.Fprintln(w, nv)
+	   nl.List[2].Items[1].Id = 23
+	   nl.List[2].Items[1].Name = "回滚"
+	   nl.List[2].Items[1].State = "main.appManageRollback"
+	   nl.List[2].Items[1].IncludeState = "main.appManageRollback"
+
+	   result, _ := json.MarshalIndent(nl,"", " ")
+	   fmt.Fprintln(w, string(result))
+	*/
+
+	fmt.Fprintln(w, nv)
 }
 
 var nv = `
@@ -373,17 +385,16 @@ var nv = `
 }
 `
 
-
 func main() {
-    StaticServer("/static/", "./template")
-    http.HandleFunc("/applist", appList)
-    // http.HandleFunc("/", sayhelloName)
-    http.HandleFunc("/getapplist", getApplist)
-    http.HandleFunc("/appdeploy", appDeploy)
-    http.HandleFunc("/navlist", navList)
+	StaticServer("/static/", "./template")
+	http.HandleFunc("/applist", appList)
+	// http.HandleFunc("/", sayhelloName)
+	http.HandleFunc("/getapplist", getApplist)
+	http.HandleFunc("/appdeploy", appDeploy)
+	http.HandleFunc("/navlist", navList)
 
-    err := http.ListenAndServe(":10000", nil)
-    if err != nil {
-        log.Fatal("ListenAndServe:", err)
-    }
+	err := http.ListenAndServe(":10000", nil)
+	if err != nil {
+		log.Fatal("ListenAndServe:", err)
+	}
 }
