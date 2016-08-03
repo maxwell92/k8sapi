@@ -46,7 +46,9 @@ func (ec *EndpointController) Post(url string) {
 
 	ep := new(endpoint.Endpoint)
 	ep.ApiVersion = "v1"
-	ep.Kind = "Endpoint"
+	ep.Kind = "Endpoints"
+	ep.Metadata.Name = "nginx-ep-test"
+	ep.Metadata.Labels = labels
 	ep.SubSets = make([]endpoint.SubSetsEL, 1)
 	ep.SubSets[0].Addresses = make([]endpoint.AddressesType, 1)
 	ep.SubSets[0].Addresses[0].IP = "192.168.1.100"
@@ -54,6 +56,7 @@ func (ec *EndpointController) Post(url string) {
 	ep.SubSets[0].Ports[0].Port = 8080
 
 	result, _ := json.MarshalIndent(ep, "", " ")
+	fmt.Println(string(result))
 	rep, err := client.Post(url, strings.NewReader(string(result)))
 	if err != nil {
 		log.Println(err)
