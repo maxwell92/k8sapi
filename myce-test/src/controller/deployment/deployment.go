@@ -37,6 +37,7 @@ func (dc *DeploymentController) Get(url string) {
 
 	for i := 0; i < num; i++ {
 		fmt.Println(dplist.Items[i].Metadata.Name)
+		fmt.Println(dplist.Items[i].Metadata.CreationTimestamp)
 	}
 }
 

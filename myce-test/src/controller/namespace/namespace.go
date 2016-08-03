@@ -39,11 +39,11 @@ func (nc *NamespaceController) Post(url string) {
 	client := hc.NewHttpClient("", "")
 
 	labels := make(map[string]string, 1)
-	labels["name"] = "nginx-ep-test"
+	labels["name"] = "nginx-ns-test"
 
 	ns := new(namespace.Namespace)
 	ns.ApiVersion = "v1"
-	ns.Kind = "Namespaces"
+	ns.Kind = "Namespace"
 	ns.Metadata.Name = "nginx-ns-test"
 	ns.Metadata.Labels = labels
 

@@ -7,6 +7,8 @@ import (
 
 	deployc "controller/deployment"
 	endpointc "controller/endpoint"
+	namespacec "controller/namespace"
+	podc "controller/pod"
 )
 
 func sayhelloName(w http.ResponseWriter, r *http.Request) {
@@ -41,12 +43,41 @@ func Endpoint(w http.ResponseWriter, r *http.Request) {
 	ec.Get("http://master:8080/api/v1/namespaces/default/endpoints")
 
 }
+func Namespace(w http.ResponseWriter, r *http.Request) {
+	var nc namespacec.NamespaceController
 
+	nc.Get("http://master:8080/api/v1/namespaces")
+
+	nc.Post("http://master:8080/api/v1/namespaces")
+
+	nc.Get("http://master:8080/api/v1/namespaces")
+
+	nc.Delete("http://master:8080/api/v1/namespaces/nginx-ns-test")
+
+	nc.Get("http://master:8080/api/v1/namespaces")
+
+}
+func Pod(w http.ResponseWriter, r *http.Request) {
+	var pc podc.PodController
+
+	pc.Get("http://master:8080/api/v1/namespaces/default/pods")
+
+	pc.Post("http://master:8080/api/v1/namespaces/default/pods")
+
+	pc.Get("http://master:8080/api/v1/namespaces/default/pods")
+
+	pc.Delete("http://master:8080/api/v1/namespaces/nginx-pd-test")
+
+	pc.Get("http://master:8080/api/v1/namespaces/default/pods")
+
+}
 func main() {
 
 	http.HandleFunc("/", sayhelloName)
 	http.HandleFunc("/deploy", Deploy)
 	http.HandleFunc("/endpoint", Endpoint)
+	http.HandleFunc("/namespace", Namespace)
+	http.HandleFunc("/pod", Pod)
 	err := http.ListenAndServe(":10000", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe:", err)
