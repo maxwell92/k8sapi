@@ -201,9 +201,9 @@ func getApplist(w http.ResponseWriter, r *http.Request) {
 	for i := 0; i < len(rs.Items); i++ {
 		var dc []string
 		dc = make([]string, 1)
-		dc[0] = "shijilulian"
+		dc[0] = "世纪互联"
 
-		applist[i].Healthz.PodsAvailable = "all"
+		applist[i].Healthz.PodsAvailable = "全部"
 		applist[i].Name = podlist[i].Name
 		applist[i].Label = rs.Items[i].Metadata.Labels
 		applist[i].Datacenter = dc
@@ -218,16 +218,16 @@ func getApplist(w http.ResponseWriter, r *http.Request) {
 		sec := elapsedDuration.Seconds()
 
 		if hour > 24 {
-			applist[i].Worktime = fmt.Sprintf("%d days", int(hour/24))
+			applist[i].Worktime = fmt.Sprintf("%d 天", int(hour/24))
 		} else if hour < 1 {
 			if min > 1 {
-				applist[i].Worktime = fmt.Sprintf("%d minutes", int(min))
+				applist[i].Worktime = fmt.Sprintf("%d 分钟", int(min))
 			} else {
-				applist[i].Worktime = fmt.Sprintf("%d seconds", int(sec))
+				applist[i].Worktime = fmt.Sprintf("%d 秒", int(sec))
 			}
 
 		} else {
-			applist[i].Worktime = fmt.Sprintf("%d hours", int(hour))
+			applist[i].Worktime = fmt.Sprintf("%d 小时", int(hour))
 		}
 
 	}
