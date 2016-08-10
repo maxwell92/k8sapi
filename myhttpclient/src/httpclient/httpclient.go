@@ -33,7 +33,7 @@ func NewHttpClient(host, port string) *HttpClient {
     return instance
 }
 
-func (c *HttpClient)Get(url string) (body []byte, err error) {
+func (c *HttpClient)Get(url string) (response []byte, err error) {
     resp, err := c.client.Get(url) 
     if err != nil {
         log.Fatal(err)
@@ -42,15 +42,15 @@ func (c *HttpClient)Get(url string) (body []byte, err error) {
 
     defer resp.Body.Close()
 
-    body, err = ioutil.ReadAll(resp.Body)
+    response, err = ioutil.ReadAll(resp.Body)
     if err != nil {
         log.Fatal(err)
         return nil, err
     } 
 
-    return body, nil
+    return response, nil
 }
-func (c *HttpClient)Post(url string, body io.Reader) (rep []byte, err error) {
+func (c *HttpClient)Post(url string, body io.Reader) (response []byte, err error) {
     resp, err := c.client.Post(url, "application/json;charset=utf-8", body)
 
     if err != nil {
@@ -60,13 +60,13 @@ func (c *HttpClient)Post(url string, body io.Reader) (rep []byte, err error) {
 
     defer resp.Body.Close()
 
-    rep, err = ioutil.ReadAll(resp.Body)
+    response, err = ioutil.ReadAll(resp.Body)
     if err != nil {
         log.Fatal(err)
         return nil, err
     }
     
-    return rep, nil
+    return response, nil
 }
 
 //TODO: add Http Put Method
@@ -74,7 +74,7 @@ func (c *HttpClient)Put() {
 
 }
 
-func (c *HttpClient)Delete(url string) (result []byte, err error) {
+func (c *HttpClient)Delete(url string) (response []byte, err error) {
     req, err := http.NewRequest("DELETE", url, nil)
     if err != nil {
         log.Fatal(err)
@@ -89,13 +89,13 @@ func (c *HttpClient)Delete(url string) (result []byte, err error) {
     
     defer resp.Body.Close()
 
-    result, err = ioutil.ReadAll(resp.Body)
+    response, err = ioutil.ReadAll(resp.Body)
     if err != nil {
         log.Fatal(err)
         return nil, err
     }
 
-    return result, nil 
+    return response, nil 
 }
 
 

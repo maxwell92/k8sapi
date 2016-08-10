@@ -4,15 +4,23 @@ import (
     "fmt"
     "log"
     "httpclient"
-    "crypto/tls"
+    "strings"
 )
 
 func main() {
-    client := httpclient.NewHttpClient("http://usa1", "8080")
-    response, err := client.Get("http://usa1:8080/api/v1/pods")
+/*
+    response, err := client.Get("http://master:8080/api/v1/pods")
+    if err != nil {
+        log.Println(err)
+    }
+*/
+
+    client := httpclient.NewHttpClient("http://master", "8080")
+    fmt.Println(rcJson)
+    response, err := client.Post("http://master:8080/api/v1/namespaces/default/replicationcontrollers", strings.NewReader(rcJson))
     if err != nil {
         log.Println(err)
     }
 
-    fmt.Println(response)
+    fmt.Println(string(response))
 }

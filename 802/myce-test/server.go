@@ -186,7 +186,7 @@ func getApplist(w http.ResponseWriter, r *http.Request) {
 	num := len(rs.Items)
 	fmt.Println(num)
 
-	podlist := make(applist.PodlistType, 20)
+	podlist := make(applist.PodlistType, num)
 
 	for i := 0; i < len(rs.Items); i++ {
 		podlist[i].Name = rs.Items[i].Metadata.Name
