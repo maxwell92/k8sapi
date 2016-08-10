@@ -20,15 +20,15 @@ func sayhelloName(w http.ResponseWriter, r *http.Request) {
 func Deploy(w http.ResponseWriter, r *http.Request) {
 	var dc deployc.DeploymentController
 
-	dc.Get("http://master:8080/apis/extensions/v1beta1/namespaces/default/deployments")
+	dc.Get("http://204.11.99.12:8080/apis/extensions/v1beta1/namespaces/default/deployments")
 
-	dc.Post("http://master:8080/apis/extensions/v1beta1/namespaces/default/deployments")
+	dc.Post("http://204.11.99.12:8080/apis/extensions/v1beta1/namespaces/default/deployments")
 
-	dc.Get("http://master:8080/apis/extensions/v1beta1/namespaces/default/deployments")
+	dc.Get("http://204.11.99.12:8080/apis/extensions/v1beta1/namespaces/default/deployments")
 
-	dc.Delete("http://master:8080/apis/extensions/v1beta1/namespaces/default/deployments/nginx-test")
+	dc.Delete("http://204.11.99.12:8080/apis/extensions/v1beta1/namespaces/default/deployments/nginx-test")
 
-	dc.Get("http://master:8080/apis/extensions/v1beta1/namespaces/default/deployments")
+	dc.Get("http://204.11.99.12:8080/apis/extensions/v1beta1/namespaces/default/deployments")
 }
 
 func Endpoint(w http.ResponseWriter, r *http.Request) {
@@ -103,6 +103,17 @@ func Service(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func App(w http.ResponseWriter, r *http.Request) {
+	var dc deployc.DeploymentController
+	url := "/handle"
+	dc.DeployApp(url)
+}
+
+func Handle(w http.ResponseWriter, r *http.Request) {
+	var dc deployc.DeploymentController
+	dc.Handle(
+}
+
 func main() {
 
 	http.HandleFunc("/", sayhelloName)
@@ -112,6 +123,8 @@ func main() {
 	http.HandleFunc("/pod", Pod)
 	http.HandleFunc("/replicaset", ReplicaSet)
 	http.HandleFunc("/service", Service)
+	http.HandleFunc("/app", App)
+	http.HandleFunc("/handle", Handle)
 	fmt.Println("My server is listening on localhost:10000")
 	err := http.ListenAndServe(":10000", nil)
 	if err != nil {

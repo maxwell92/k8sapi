@@ -102,6 +102,64 @@ var myDeploy = `
 }
 `
 
+var myApp = `
+{
+	"name": "nginx-test",
+	"namespace": "default",
+	"datacenter": [
+		"shijihulian"
+	],
+	"image": "nginx:1.7.9",
+	"replicas": 3,
+	"spec": {
+		"request": {
+			"cpu": "2",
+			"mem": "512"
+		}			
+	},
+	"configFile": [
+		"/root/nginx.conf"	
+	],
+	"mountPoints": {
+		"name": "disk1",
+		"mountPath": "/usr/local/nginx/html"
+	},
+	"healthCheck": {
+		"httpGet": {
+			"path": "http://api/v1/healthz",
+			"port": 11000
+		},
+		"initialDelaySeconds": 3,
+		"periodSeconds": 2
+	},
+	"readiness": {
+		"exec": {
+			"echo readiness"	
+		}	
+	},
+	"postStart": {
+		"exec": {
+			"echo postStart"	
+		}	
+	},
+	"preStop": {
+		"exec": {
+			"echo preStop"	
+		}	
+	},
+	"env": {
+		"magic": "good",
+		"sheep": "mushroom"
+	},
+	"command": [
+		"echo"	
+	],
+	"args": [
+		"abc"	
+	]
+}			
+`
+
 func (dc *DeploymentController) Post(url string) {
 	client := hc.NewHttpClient("", "")
 	rep, err := client.Post(url, strings.NewReader(string(myDeploy)))
@@ -123,6 +181,24 @@ func (dc *DeploymentController) Delete(url string) {
 	} else {
 		fmt.Println(string(resp))
 	}
+}
+
+func (dc *DeploymentController) DeployApp(url string) {
+	client := hc.NewHttpClient("", "")
+	resp, err := client.Post(url, strings.NewReader(string(myApp)))
+	if err != nil {
+		log.Println(err)
+	} else {
+		fmt.Println(string(resp))
+	}
+}
+
+func (dc *DeploymentController) Handle(url string) {
+	//TODO: Unmarshal
+	// Validation of dc
+	// for each dc
+	// post to k8s
+	// write back the response
 }
 
 func (dc *DeploymentController) Describe(url string) {

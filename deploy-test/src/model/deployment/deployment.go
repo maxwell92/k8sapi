@@ -1,5 +1,158 @@
 package deployment
 
+// AppDeployment for Frontend fulfillment
+type AppDeployment struct {
+	Name        string             `json: "name"`
+	Namespace   string             `json: "namespace"`
+	Datacenter  []string           `json: "datacenter"`
+	Image       string             `json: "image"`
+	Replicas    float64            `json: "replicas"`
+	Spec        *ASpecType         `json: "spec"`
+	ConfigFile  []string           `json: "configFile,omitempty"`
+	MountPoints []AMountPointsType `json: "mountPoints,omitempty"`
+	HealthCheck *AHealthCheckType  `json: "healthCheck,omitempty"`
+	Readiness   *AReadinessType    `json: "readiness,omitempty"`
+	PostStart   *APostType         `json: "postStart,omitempty"`
+	PreStop     *APreType          `json: "preStop,omitempty"`
+	Env         []AEnvType         `json: "env,omitempty"`
+	Labels      map[string]string  `json: "labels"`
+	Command     []string           `json: "command,omitempty"`
+	Args        []string           `json: "args,omitempty"`
+}
+
+type ASpecType struct {
+	Request map[string]string `json: "requests"`
+}
+
+type AMountPointsType struct {
+	Name      string `json: "name"`
+	Readonly  bool   `json: "readOnly,omitempty"`
+	MountPath string `json: "mountPath"`
+}
+
+type AHealthCheckType struct {
+	Exec                *AExecHealthType `json: "exec,omitempty"`
+	HttpGet             *AHttpHealthType `json: "httpGet,omitempty"`
+	TcpSocket           *ATcpHealthType  `json: "tcpSocket,omitempty"`
+	InitialDelaySeconds float64          `json: "initialDelaySeconds,omitempty"`
+	TimeoutSeconds      float64          `json: "timeoutSeconds,omitempty"`
+	PeriodSeconds       float64          `json: "periodSeconds,omitempty"`
+	SuccessThreshold    float64          `json: "successThreshold,omitempty"`
+	FailureThreshold    float64          `json: "failureThreshold,omitempty"`
+}
+
+type AExecHealthType struct {
+	Command []string `json: "command,omitempty"`
+}
+
+type AHttpHealthType struct {
+	Path        string               `json: "path,omitempty"`
+	Port        float64              `json: "port,omitempty"`
+	Host        string               `json: "host,omitempty"`
+	Scheme      string               `json: "scheme,omitempty"`
+	HttpHeaders []AHeadersHealthType `json: "httpHeaders,omitempty"`
+}
+
+type AHeadersHealthType struct {
+	Name  string `json: "name,omitempty"`
+	Value string `json: "value,omitempty"`
+}
+
+type ATcpHealthType struct {
+	Port float64 `json: "port,omitempty"`
+}
+
+type AReadinessType struct {
+	Exec                *AExecReadType `json: "exec,omitempty"`
+	HttpGet             *AHttpReadType `json: "httpGet,omitempty"`
+	TcpSocket           *ATcpReadType  `json: "tcpSocket,omitempty"`
+	InitialDelaySeconds float64        `json: "initialDelaySeconds,omitempty"`
+	TimeoutSeconds      float64        `json: "timeoutSeconds,omitempty"`
+	PeriodSeconds       float64        `json: "periodSeconds,omitempty"`
+	SuccessThreshold    float64        `json: "successThreshold,omitempty"`
+	FailureThreshold    float64        `json: "failureThreshold,omitempty"`
+}
+
+type AExecReadType struct {
+	Command []string `json: "command,omitempty"`
+}
+
+type AHttpReadType struct {
+	Path        string          `json: "path,omitempty"`
+	Port        float64         `json: "port,omitempty"`
+	Host        string          `json: "host,omitempty"`
+	Scheme      string          `json: "scheme,omitempty"`
+	HttpHeaders []AHeadersRType `json: "httpHeaders,omitempty"`
+}
+
+type AHeadersRType struct {
+	Name  string `json: "name,omitempty"`
+	Value string `json: "value,omitempty"`
+}
+
+type ATcpReadType struct {
+	Port float64 `json: "port,omitempty"`
+}
+
+type APostType struct {
+	Exec      *AExecPostType    `json: "exec,omitempty"`
+	HttpGet   *AHttpGetPostType `json: "httpGet,omitempty"`
+	TcpSocket *ATcpPostType     `json: "tcpPSLCType,omitempty"`
+}
+
+type AExecPostType struct {
+	Command []string `json: "command,omitempty"`
+}
+
+type AHttpGetPostType struct {
+	Path        string             `json: "path,omitempty"`
+	Port        float64            `json: "port,omitempty"`
+	Host        string             `json: "host,omitempty"`
+	Scheme      string             `json: "scheme,omitempty"`
+	HttpHeaders []AHeadersPostType `json: "httpHeaders,omitempty"`
+}
+
+type AHeadersPostType struct {
+	Name  string `json: "name,omitempty"`
+	Value string `json: "value,omitempty"`
+}
+
+type ATcpPostType struct {
+	Port float64 `json: "port,omitempty"`
+}
+
+type APreType struct {
+	Exec      *AExecPreType    `json: "exec,omitempty"`
+	HttpGet   *AHttpGetPreType `json: "httpGet,omitempty"`
+	TcpSocket *ATcpPreType     `json: "tcpPSLCType,omitempty"`
+}
+
+type AExecPreType struct {
+	Command []string `json: "command,omitempty"`
+}
+
+type AHttpGetPreType struct {
+	Path        string             `json: "path,omitempty"`
+	Port        float64            `json: "port,omitempty"`
+	Host        string             `json: "host,omitempty"`
+	Scheme      string             `json: "scheme,omitempty"`
+	HttpHeaders []AHheadersPreType `json: "httpHeaders,omitempty"`
+}
+
+type AHeadersPreType struct {
+	Name  string `json: "name,omitempty"`
+	Value string `json: "value,omitempty"`
+}
+
+type ATcpPreType struct {
+	Port float64 `json: "port,omitempty"`
+}
+
+type AEnvType struct {
+	Name  string `json: "name,omitempty"`
+	Value string `json: "value,omitempty"`
+}
+
 // DeploymentList for Get @/apis/extensions/v1beta1/namespaces/{namespace}/deployments
 type DeploymentList struct {
 	Kind       string           `json:"kind"`
