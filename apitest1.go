@@ -1,12 +1,13 @@
 package main
+
 import (
-	"fmt"
-	"net/http"
-	"io/ioutil"
 	"crypto/tls"
 	"encoding/json"
-	"os"
+	"fmt"
+	"io/ioutil"
 	"log"
+	"net/http"
+	"os"
 )
 
 type paths struct {
@@ -15,20 +16,20 @@ type paths struct {
 
 func Get(url string) (body []byte, err error) {
 	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},	
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 
 	client := &http.Client{Transport: tr}
 	resp, err := client.Get(url)
 	if err != nil {
-		return nil, err	
+		return nil, err
 	}
 
 	defer resp.Body.Close()
 
 	body, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err	
+		return nil, err
 	}
 
 	return body, nil
@@ -36,13 +37,12 @@ func Get(url string) (body []byte, err error) {
 
 func resolveToStruct(response []byte) (s *paths, err error) {
 	err = json.Unmarshal(response, &s)
-	return s, err 
+	return s, err
 }
-
 
 func main() {
 	url := os.Args[2]
-	method := os.Args[1]		
+	method := os.Args[1]
 
 	fmt.Println(method)
 	fmt.Println(url)
@@ -51,16 +51,16 @@ func main() {
 	response, err := Get(url)
 	if err != nil {
 		panic(err)
-		log.Println(err)	
+		log.Println(err)
 	}
 
-	rs, err := resolveToStruct(response)		
+	rs, err := resolveToStruct(response)
 	if err != nil {
 		panic(err)
 		log.Println(err)
 	}
-	
+
 	for i := 0; i < len(rs.Paths); i++ {
-		fmt.Println(rs.Paths[i])		
+		fmt.Println(rs.Paths[i])
 	}
 }

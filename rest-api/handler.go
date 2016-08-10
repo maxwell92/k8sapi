@@ -1,13 +1,13 @@
-package main 
+package main
 
 import (
+	"crypto/tls"
+	"encoding/json"
 	"fmt"
 	"html"
+	"io/ioutil"
 	"log"
 	"net/http"
-	"encoding/json"
-	"crypto/tls"
-	"io/ioutil"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -19,7 +19,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 func Get(url string) (body []byte, err error) {
 	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},	
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 
 	client := &http.Client{Transport: tr}
@@ -27,14 +27,14 @@ func Get(url string) (body []byte, err error) {
 	if err != nil {
 		log.Println(err)
 		panic(err)
-		return nil, err	
+		return nil, err
 	}
 
 	defer resp.Body.Close()
 
 	body, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err	
+		return nil, err
 	}
 
 	return body, nil
@@ -42,23 +42,21 @@ func Get(url string) (body []byte, err error) {
 
 func resolveToStruct(response []byte) (s *podlist, err error) {
 	err = json.Unmarshal(response, &s)
-	return s, err 
+	return s, err
 }
 
-
-
 func Podlist(w http.ResponseWriter, r *http.Request) {
-	
+
 	var response []byte
 	var err error
 
 	response, err = Get("http://172.21.1.11:8080/api/v1/pods")
 	if err != nil {
 		panic(err)
-		log.Println(err)	
+		log.Println(err)
 	}
-		
-	rs, err := resolveToStruct(response)		
+
+	rs, err := resolveToStruct(response)
 	if err != nil {
 		panic(err)
 		log.Println(err)
@@ -67,11 +65,11 @@ func Podlist(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Name\t\tReady\t\tStatus\t\tRestarts\t\tAge\n")
 
 	for i := 0; i < len(rs.Items); i++ {
-		fmt.Printf("%s\t\t", rs.Items[i].Metadata.Name)		
+		fmt.Printf("%s\t\t", rs.Items[i].Metadata.Name)
 		if rs.Items[i].Status.ContainerStatuses[0].Ready == true {
-			fmt.Printf("%d\t\t", 1)	
+			fmt.Printf("%d\t\t", 1)
 		} else {
-			fmt.Printf("%d\t\t", 0)	
+			fmt.Printf("%d\t\t", 0)
 		}
 
 		fmt.Printf("%s\t\t", rs.Items[i].Status.Phase)
@@ -80,7 +78,6 @@ func Podlist(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("\n")
 
 	}
-
 
 	podlist := make(PodlistType, 20)
 
@@ -92,7 +89,6 @@ func Podlist(w http.ResponseWriter, r *http.Request) {
 		podlist[i].StartTime = rs.Items[i].Status.StartTime
 	}
 
-		
 	json.NewEncoder(w).Encode(podlist)
 
 }
@@ -108,10 +104,10 @@ func Podetails(w http.ResponseWriter, r *http.Request) {
 	response, err = Get("http://172.21.1.11:8080/api/v1/pods")
 	if err != nil {
 		panic(err)
-		log.Println(err)	
+		log.Println(err)
 	}
-		
-	rs, err := resolveToStruct(response)		
+
+	rs, err := resolveToStruct(response)
 	if err != nil {
 		panic(err)
 		log.Println(err)
@@ -120,7 +116,7 @@ func Podetails(w http.ResponseWriter, r *http.Request) {
 	var i int
 	for i = 0; i < len(rs.Items); i++ {
 		if strings.Compare(rs.Items[i].Metadata.Name, podname) == 0 {
-			fmt.Println("Found")	
+			fmt.Println("Found")
 			var podetails PodetailsType
 			podetails.Name = rs.Items[i].Metadata.Name
 			podetails.Namespace = rs.Items[i].Metadata.Namespace
@@ -134,18 +130,17 @@ func Podetails(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 	}
-	
+
 	if i == len(rs.Items) {
-		fmt.Println("Not Found!")	
+		fmt.Println("Not Found!")
 		fmt.Fprintln(w, "Not Found!")
 	}
 
-	
 }
 
 func delPod(w http.ResponseWriter, r *http.Request) {
 	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},	
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 
 	client := &http.Client{Transport: tr}
@@ -154,7 +149,6 @@ func delPod(w http.ResponseWriter, r *http.Request) {
 	podname := vars["podname"]
 	fmt.Fprintln(w, "Pod [", podname, "] Details: ")
 
-	
 	req, err := http.NewRequest("DELETE", "http://172.21.1.11:8080/api/v1/namespaces/default/pods/"+podname, nil)
 	if err != nil {
 		log.Println(err)
@@ -167,43 +161,42 @@ func delPod(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
+	/*	var response []byte
+		var err error
 
-/*	var response []byte
-	var err error
-
-	response, err = Get("http://172.21.1.11:8080/api/v1/pods")
-	if err != nil {
-		panic(err)
-		log.Println(err)	
-	}
-		
-	rs, err := resolveToStruct(response)		
-	if err != nil {
-		panic(err)
-		log.Println(err)
-	}
-
-	var i int
-	for i = 0; i < len(rs.Items); i++ {
-		if strings.Compare(rs.Items[i].Metadata.Name, podname) == 0 {
-			fmt.Println("Found")	
-			break
+		response, err = Get("http://172.21.1.11:8080/api/v1/pods")
+		if err != nil {
+			panic(err)
+			log.Println(err)
 		}
-	}
-	
-	if i == len(rs.Items) {
-		fmt.Println("Not Found!")	
-		fmt.Fprintln(w, "Not Found!")
-	}
-*/
+
+		rs, err := resolveToStruct(response)
+		if err != nil {
+			panic(err)
+			log.Println(err)
+		}
+
+		var i int
+		for i = 0; i < len(rs.Items); i++ {
+			if strings.Compare(rs.Items[i].Metadata.Name, podname) == 0 {
+				fmt.Println("Found")
+				break
+			}
+		}
+
+		if i == len(rs.Items) {
+			fmt.Println("Not Found!")
+			fmt.Fprintln(w, "Not Found!")
+		}
+	*/
 	defer resp.Body.Close()
 
-/*	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Println(err)
-		panic(err)
-	}
-*/
+	/*	body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Println(err)
+			panic(err)
+		}
+	*/
 	fmt.Fprintln(w, "Deleted!")
 
 }

@@ -1,8 +1,10 @@
-package main 
+package main
+
 import (
-	"net/http"
 	"log"
+	"net/http"
 )
+
 //succeed one
 /*
 func main() {
@@ -33,7 +35,7 @@ func main() {
     //http.Handle("/app/", http.StripPrefix("/app/", fs))
 
 
-    // /statics also works well 
+    // /statics also works well
     http.Handle("/statics", http.StripPrefix("/statics/", fs))
 
 	log.Fatal(http.ListenAndServe(":10001", nil))
@@ -41,20 +43,15 @@ func main() {
 */
 
 func main() {
-    fs := http.FileServer(http.Dir("./statics"))
-    http.Handle("/statics/", http.StripPrefix("/statics/", fs))
+	fs := http.FileServer(http.Dir("./statics"))
+	http.Handle("/statics/", http.StripPrefix("/statics/", fs))
 	log.Fatal(http.ListenAndServe(":10001", nil))
 }
 
-
-
 //usage
 /*
-func StaticServer(prefix string, staticDir string) {  
-    http.Handle(prefix, http.StripPrefix(prefix, http.FileServer(http.Dir(staticDir))))  
-    return  
+func StaticServer(prefix string, staticDir string) {
+    http.Handle(prefix, http.StripPrefix(prefix, http.FileServer(http.Dir(staticDir))))
+    return
 }
 */
-
-
-

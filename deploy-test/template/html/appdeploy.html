@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<meta content="email=no" name="format-detection">
+<link rel="stylesheet" type="text/css" href="template/css/index.css">
+<link rel="stylesheet" href="template/css/font-awesome.min.css">
+<title>标题</title>
+</head>
+
+<body>
+<nav>
+    <img src="template/images/logo.png">
+    <b class="fa icon-reorder"></b>
+    <b class="fa icon-envelope"></b>
+    <b class="fa icon-bell-alt"></b>
+    <b class="fa icon-search"></b>
+    <span class="yp-nav-span">
+        <img src="template/images/photo.jpg">
+        <details>
+            <summary>Copyright 2011.</summary>
+            <span>
+                <p><i class="fa icon-wrench"></i>Settings</p>
+                <p><i class="fa icon-user"></i>Profile</p>
+                <p><i class="fa icon-lock"></i>Help</p>
+                <p><i class="fa icon-exclamation-sign"></i>Logout</p>
+            </span>
+        </details>
+        <i class="fa icon-comments"></i>
+    </span>
+
+</nav>
+<div class="yp-wrap">
+    
+    <div class="yp-leftbox">
+        <dl>
+            <dt><img src="template/images/photo.jpg"></dt>
+            <dd>
+                <p><h3 class="h3s">David Lee</h3></p>
+                <p><span>web Developer</span></p>
+            </dd>
+        </dl>
+        <ul class="yp-leftbox-uls">
+
+            <li>
+                <a href="#">
+                    <i class="fa icon-dashboard"></i>
+                    Dashboard
+                </a>
+            </li>
+
+
+            <li>
+                <a href="#">
+                    <i class="fa icon-suitcase"></i>
+                    应用管理
+                    <b class="fa icon-angle-left"></b> 
+                    <span>TOP</span>
+                </a>
+                <ul>
+                    <li> <a href="#">查看应用列表 </a></li>
+                    <li> <a href="#">发布应用 </a></li>
+                    <li> <a href="#">回滚 </a></li>
+                    <li> <a href="#">滚动升级 </a></li>
+                    <li> <a href="#">撤销发布 </a></li>
+                </ul>
+            </li>
+
+
+
+            <li>
+                <a href="#">
+                    <i class="fa icon-road"></i>
+                    扩展功能
+                    <b class="fa icon-angle-left"></b> 
+                    <span>TOP</span>
+                </a>
+                <ul>
+                    <li> <a href="#">服务管理 </a></li>
+                    <li> <a href="#">访问点管理 </a></li>
+                </ul>
+            </li>
+
+
+            <li>
+                <a href="#">
+                    <i class="fa icon-cloud"></i>
+                    云盘管理
+                    <b class="fa icon-angle-left"></b> 
+                    <span>TOP</span>
+                </a>
+                <ul>
+                    <li> <a href="#">创建云盘 </a></li>
+                    <li> <a href="#">查看云盘 </a></li>
+                </ul>
+            </li>
+
+
+            <li>
+                <a href="#">
+                    <i class="fa icon-cog"></i>
+                    账户设置
+                    <b class="fa icon-angle-left"></b> 
+                    <span>TOP</span>
+                </a>
+                <ul>
+                    <li> <a href="#">修改密码 </a></li>
+                    <li> <a href="#">查看信息 </a></li>
+                </ul>
+            </li>
+
+
+            <li>
+                <a href="#">
+                    <i class="fa icon-jpy"></i>
+                    充值
+                </a>
+            </li>
+
+        </ul>
+        
+    </div>
+    
+    <div class="post-conten" ui-view>
+        <div class="post-nav">
+            发布应用
+        </div>
+        <form class="post-right" action="./appdeploy" method="post">
+            <h3>填写信息</h3>
+            <dl>
+                <dt>应用名：<i>应用名是您将要创建的应用的名称，组织内具有唯一性</i>
+                </dt>
+                <dd><input type="text" class="post-r-linp" name="appname" /></dd>
+            </dl>
+            <dl>
+                <dt>组织：<i>组织是您的应用所属的项目或您个人所属的组织</i></dt>
+                <dd><input type="text" class="post-r-linp" name="namespace"/></dd>
+            </dl>
+            <dl>
+                <dt>数据中心</dt>
+                <dd class="post-r-namber">
+                    <p>
+                        <input type="checkbox" id="format-sjhl" name="formats datacenter" value="shijihulian" />
+                        <label for="format-sjhl">世纪互联</label>
+                    </p>
+                    <p>
+                        <input type="checkbox" id="format-dx" name="formats datacenter" value="dianxin" />
+                        <label for="format-dx">电信</label>
+                    </p>
+                    <p>
+                        <input type="checkbox" id="format-rd" name="formats datacenter" value="runde"/>
+                        <label for="format-rd">润德</label>
+                    </p>
+                </dd>
+            </dl>
+            <dl>
+                <dt>镜像</dt>
+                <dd>
+                    <input type="text" class="post-r-linp" name="image" />
+                </dd>
+            </dl>
+            <dl>
+                <dt>副本数</dt>
+                <dd>
+                    <input type="text" class="post-r-linp" name="replicas" />
+                </dd>
+            </dl>
+            <dl>
+                <dt>规格</dt>
+                <dd class="post-r-format">
+                    <p>
+                        <input type="radio" id="box1" class="box2" name="spec" value="1" />
+                        <label for="box1" class="box2-label">
+                            <span class="poet-span1">
+                                2X
+                            </span>
+                            <span class="poet-span2">
+                                521 MB 内存 1 CPU(共享)
+                            </span>
+                        </label>
+                    </p>
+                    <p>
+                        <input type="radio" id="box2" class="box2" name="spec" value="2" />
+                        <label for="box2" class="box2-label">
+                            <span class="poet-span1">
+                                16X
+                            </span>
+                            <span class="poet-span2">
+                                    4 GB 内存 1 CPU(共享)
+                            </span>
+                        </label>
+                    </p>
+                    <p>
+                        <input type="radio" id="box3" class="box2" name="spec" value="3" />
+                        <label for="box3" class="box2-label">
+                            <span class="poet-span1">
+                                32X
+                            </span>
+                            <span class="poet-span2">
+                                16 GB 内存 8 CPU(共享)
+                            </span>
+                        </label>
+                    </p>
+                </dd>
+            </dl>
+            <dl>
+                <dt>label</dt>
+                <dd class="post-append">
+                    <input type="text" name="label-k" />：<input type="text" name="label-v" />
+                    <b class="post-btn1">+</b>
+                </dd>
+            </dl>
+            <dl>
+                <dt>配置文件</dt>
+                <dd class="uploader black" id="uploadForm">
+
+                    <input type="text" class="filename" readonly/>
+                    <input type="button" name="file configFile" class="button" value="上传..."/>
+                    <input type="file" size="30"/>
+
+
+                </dd>
+            </dl>
+            <dl>
+                <dt>挂载</dt>
+                <dd>
+                    <input type="text" name="mountPoints"/> :
+                    <select name="mountPath">
+                        <option>11</option>
+                        <option>22</option>
+                        <option>33</option>
+                        <option>44</option>
+                    </select>
+                </dd>
+            </dl>
+
+
+
+
+<span class="post-r-pans">
+
+
+
+
+            <hr class="post-hr">
+            <dl>
+                <dt>
+                    <input type="checkbox" name="healthCheck" />
+                    健康检查
+                </dt>
+                <dd>
+                    <ul>
+                        <li>
+                            <input type="radio" name="httpGet" />HTTP
+                            <p>
+                                <span>URL</span>
+                                <input type="text" name="path" />
+                            </p>
+                        </li>
+                        <li>
+                            <input type="radio" name="tcpSocket" />TCP
+                            <p>
+                                <span>Port</span>
+                                <input type="text" name="post" />
+                            </p>
+                            <p>
+                        </li>
+                        <li>
+                            <input type="radio" name="exec" />Bash
+                            <p>
+                                <span>路径</span>
+                                <dd class="uploader black post-uploader" id="uploadForm">
+                                    <input type="text" class="filename" readonly  value="lalal "/>
+                                    <input type="button" name="file command" class="button" value="上传..."/>
+                                    <input type="file" size="30" value="nihao"/>
+                                </dd>
+                            </p>
+                            <p>
+                                <span>每隔</span>
+                                <input type="text" name="periodSeconds" />s
+                            </p>
+                            <p>
+                                <span>生效时间</span>
+                                <input type="text" name="initialDelaySeconds" />s
+                            </p>
+                        </li>
+                    </ul>
+                    
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    <input type="checkbox" name="readinessCheck" />
+                    可读性检查
+                </dt>
+                <dd>
+                    <ul>
+                        <li>
+                            <input type="radio" name="httpsGet" />HTTP
+                            <p>
+                                <span>URL</span>
+                                <input type="text" name="path" />
+                            </p>
+                            <p>
+                                <span>每隔</span>
+                                <input type="text" name="periodSeconds" />s
+                            </p>
+                            <p>
+                                <span>生效时间</span>
+                                <input type="text" name="initialDelaySeconds" />s
+                            </p>
+                        </li>
+                    </ul>
+                    
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    <input type="checkbox" name="postStart" />
+                    准备启动
+                </dt>
+                <dd>
+                    <ul>
+                        <li>
+                            <input type="radio" name="exec" />Bash
+                            <p>
+                                <span>路径</span>
+                                <dd class="uploader black post-uploader" id="uploadForm">
+                                    <input type="text" class="filename" readonly  value="lalal "/>
+                                    <input type="button" name="file command" class="button" value="上传..."/>
+                                    <input type="file" size="30" value="nihao"/>
+                                </dd>
+                            </p>
+                        </li>
+                    </ul>
+                    
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    <input type="checkbox" name="preStop" />
+                    优雅停止
+                </dt>
+                <dd>
+                    <ul>
+                        <li>
+                            <input type="radio" name="exec" />Bash
+                            <p>
+                                <span>路径</span>
+                                <dd class="uploader black post-uploader" id="uploadForm">
+                                    <input type="text" class="filename" readonly  value="lalal "/>
+                                    <input type="button" name="file command" class="button" value="上传..."/>
+                                    <input type="file" size="30" value="nihao"/>
+                                </dd>
+                            </p>
+                        </li>
+                    </ul>
+                    
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    环境变量
+                </dt>
+                <dd>
+                    <input type="text" name="evn-k" />
+                    : <input type="text" name="evn-v" />
+                    <button class="post-btn1">+</button>
+                    
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    执行命令
+                </dt>
+                <dd>
+                    <input type="text" name="commands" />
+                    
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    参数
+                </dt>
+                <dd>
+                    <input type="text" name="arg-k" /> : <input type="text" name="arg-v" />
+                    <button class="post-btn1">+</button>
+                    
+                </dd>
+            </dl>
+</span>
+            <div class="post-super">
+                <i class="fa icon-angle-down"></i>高级选项
+            </div>
+
+
+
+
+            <input type='submit' name='submit' value='提交' class="sub" /> 
+
+
+        </form>
+       
+    </div>
+
+</div>
+
+
+
+<script src="template/js/jquery.js"></script>
+<script src="template/js/index.js"></script>
+
+
+
+</body>
+
+</html>
+
+
+
+
+
+
+

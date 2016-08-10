@@ -1,20 +1,20 @@
 package main
+
 import (
+	"encoding/json"
 	"fmt"
 	"html"
 	"log"
 	"net/http"
-	"encoding/json"
 	"time"
 
 	"github.com/gorilla/mux"
 )
 
-
 type Todo struct {
-	Name 	string 	`json:"name"`
-	Completed bool 	`json:"completed"`
-	Due 	time.Time 	`json:"due"`
+	Name      string    `json:"name"`
+	Completed bool      `json:"completed"`
+	Due       time.Time `json:"due"`
 }
 
 type Todos []Todo
@@ -38,7 +38,6 @@ func TodoShow(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Todo Show: ", todoId)
 }
 
-
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", Index)
@@ -46,5 +45,5 @@ func main() {
 	router.HandleFunc("/todos/{todoId}", TodoShow)
 
 	log.Fatal(http.ListenAndServe(":10000", router))
-	
+
 }

@@ -14,8 +14,8 @@ func init() {
 func RepoFindTodo(id int) Todo {
 	for _, t := range todos {
 		if t.Id == id {
-			return t	
-		}	
+			return t
+		}
 	}
 
 	return Todo{}
@@ -31,11 +31,10 @@ func RepoCreateTodo(t Todo) Todo {
 func RepoDestroyTodo(id int) error {
 	for i, t := range todos {
 		if t.Id == id {
-			todos = append(todos[:i], todos[i+1:]...)	
+			todos = append(todos[:i], todos[i+1:]...)
 			return nil
-		}	
+		}
 	}
 
 	return fmt.Errorf("Could not find Todo with id of %d to delete", id)
 }
-	
