@@ -1,0 +1,117 @@
+{
+    "name": "",
+    "namespace": "",
+    "datacenter": "",  
+    "image": "",
+    "replicas": {},
+    "spec": {
+        "request": "any"
+    },
+    "env": [{
+        "name": "",
+        "value": ""
+    }],
+    "labels": "any", 
+    "configFile": "",
+    "mountPoints": [{
+        "name": "",
+        "readOnly": false,
+        "mountPath": ""
+    }],
+    "healthCheck": {
+        "exec": {
+            "command": [
+                ""
+            ]
+        },
+        "httpGet": {
+            "path": "",
+            "port": {},
+            "host": "",
+            "scheme": "",
+            "httpHeaders": [{
+                "name": "",
+                "value": ""
+            }] 
+        },
+        "tcpSocket": {
+            "port": {} 
+        },
+        "initialDelaySeoncds": {},
+        "timeoutSeconds": {},
+        "periodSeconds": {},
+        "successThreshold": {},
+        "failureThreshold": {}
+    },
+    "readiness": {
+         "exec": {
+            "command": [
+                ""
+            ]
+        },
+        "httpGet": {
+            "path": "",
+            "port": {},
+            "host": "",
+            "scheme": "",
+            "httpHeaders": [{
+                "name": "",
+                "value": ""
+            }] 
+        },
+        "tcpSocket": {
+            "port": {} 
+        },
+        "initialDelaySeoncds": {},
+        "timeoutSeconds": {},
+        "periodSeconds": {},
+        "successThreshold": {},
+        "failureThreshold": {}
+    },
+    "postStart": {
+        "exec": {
+            "command": [
+                ""
+            ]
+        },
+        "httpGet": {
+            "path": "",
+            "port": {},
+            "host": "",
+            "scheme": "",
+            "httpHeaders": [{
+                "name": "",
+                "value": ""
+            }]
+        },
+        "tcpSocket": {
+            "port": {} 
+        }
+    },
+    "preStop": {
+        "exec": {
+            "command": [
+                ""
+            ]
+        },
+        "httpGet": {
+            "path": "",
+            "port": {},
+            "host": "",
+            "scheme": "",
+            "httpHeaders": [{
+                "name": "",
+                "value": ""
+            }] 
+        },
+        "tcpSocket": {
+            "port": {} 
+        }
+    },
+    "command": [
+        ""
+    ],
+    "args": [
+        ""
+    ]
+}
