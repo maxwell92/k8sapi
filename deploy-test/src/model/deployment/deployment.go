@@ -132,11 +132,11 @@ type AExecPreType struct {
 }
 
 type AHttpGetPreType struct {
-	Path        string             `json: "path,omitempty"`
-	Port        float64            `json: "port,omitempty"`
-	Host        string             `json: "host,omitempty"`
-	Scheme      string             `json: "scheme,omitempty"`
-	HttpHeaders []AHheadersPreType `json: "httpHeaders,omitempty"`
+	Path        string            `json: "path,omitempty"`
+	Port        float64           `json: "port,omitempty"`
+	Host        string            `json: "host,omitempty"`
+	Scheme      string            `json: "scheme,omitempty"`
+	HttpHeaders []AHeadersPreType `json: "httpHeaders,omitempty"`
 }
 
 type AHeadersPreType struct {

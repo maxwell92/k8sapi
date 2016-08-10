@@ -106,12 +106,24 @@ func Service(w http.ResponseWriter, r *http.Request) {
 func App(w http.ResponseWriter, r *http.Request) {
 	var dc deployc.DeploymentController
 	url := "/handle"
-	dc.DeployApp(url)
+	resp, err := dc.DeployApp(url)
+
+	if err != nil {
+		log.Println(err)
+	} else {
+		fmt.Println(string(resp))
+	}
+
 }
 
 func Handle(w http.ResponseWriter, r *http.Request) {
 	var dc deployc.DeploymentController
-	dc.Handle(
+	resp, err := dc.Handle()
+	if err != nil {
+		log.Println(err)
+	} else {
+		fmt.Println(string(resp))
+	}
 }
 
 func main() {

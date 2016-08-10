@@ -6,6 +6,7 @@ import (
 	hc "httpclient"
 	"log"
 	deploy "model/deployment"
+
 	"strings"
 )
 
@@ -193,11 +194,57 @@ func (dc *DeploymentController) DeployApp(url string) {
 	}
 }
 
-func (dc *DeploymentController) Handle(url string) {
+func (dc *DeploymentController) Handle() ([]byte, error) {
+
 	//TODO: Unmarshal
+	//appDeploy := new(deploy.AppDeployment)
+	var app deploy.AppDeployment
+	//err := json.Unmarshal(myApp, &app)
+	myAppByte, err := strings.NewReader(myApp).ReadByte()
+	if err != nil {
+		log.Println(err)
+	}
+
+	err := json.Unmarshal(myAppByte, &app)
+	if err != nil {
+		log.Println(err)
+	}
+
 	// Validation of dc
+	/* for k, v := range app.Datacenter {
+		mysql.Query(v)
+	}
+	*/
 	// for each dc
+	// for k, v := range app.Datacenter
+	var dp deploy.Deployment // or new()?
+	dp.ApiVersion = "extensions/v1beta1"
+	dp.Kind = "Deployment"
+	dp.Metadata.Name = app.Name
+	dp.Metadata.Namespace = app.Namespace
+	dp.Metadata.Labels = app.Labels
+	dp.Spec.Replicas = app.Replicas
+	dp.Spec.Template.Metadata.Name = app.Name
+	dp.Spec.Template.Metadata.Labels = app.Labels
+	dp.Spec.Template.Spec.Containers[0].Name = app.Name
+	dp.Spec.Template.Spec.Containers[0].Image = app.Image
+	dp.Spec.Template.Spec.Containers[0].Command = app.Command
+	dp.Spec.Template.Spec.Containers[0].Args = app.Args
+	dp.Spec.Template.Spec.Containers[0].Env = app.Env
+	dp.Spec.Template.Spec.Containers[0].Resources.Requests = app.Spec.Request
+	dp.Spec.Template.Spec.Containers[0].VolumeMounts = app.MountPoints
+	dp.Spec.Template.Spec.Containers[0].LivenessProbe = app.HealthCheck
+	dp.Spec.Template.Spec.Containers[0].ReadinessProbe = app.Readiness
+	dp.Spec.Template.Spec.Containers[0].Lifecycle.PostStart = app.PostStart
+	dp.Spec.Template.Spec.Containers[0].Lifecycle.PreStop = app.PreStop
+
 	// post to k8s
+	var result []byte
+	client := hc.NewHttpClient("", "")
+	url := "http://master:8080/apis/extensions/v1beta1/namespaces/default/deployments"
+	result, _ = json.MarshalIndent(dp, "", "  ")
+	resp, err := client.Post(url, strings.NewReader(string(result)))
+	return resp, err
 	// write back the response
 }
 
