@@ -239,6 +239,7 @@ func (dc *DeploymentController) Handle(appJson []byte) ([]byte, error) {
 	// for each dc
 	// for k, v := range app.Datacenter
 	var dp deploy.Deployment // or new()?
+	// test status: ok
 	dp.ApiVersion = "extensions/v1beta1"
 	dp.Kind = "Deployment"
 	dp.Metadata.Name = app.Name
@@ -252,26 +253,25 @@ func (dc *DeploymentController) Handle(appJson []byte) ([]byte, error) {
 	dp.Spec.Template.Spec.Containers[0].Image = app.Image
 	dp.Spec.Template.Spec.Containers[0].Command = app.Command
 	dp.Spec.Template.Spec.Containers[0].Args = app.Args
-	/*dp.Spec.Template.Spec.Containers[0].Env = make([]deploy.EnvContainer, 2)
+	dp.Spec.Template.Spec.Containers[0].Env = make([]deploy.EnvContainer, 2)
 	dp.Spec.Template.Spec.Containers[0].Env[0].Name = app.Env[0].Name
 	dp.Spec.Template.Spec.Containers[0].Env[0].Value = app.Env[0].Value
 	dp.Spec.Template.Spec.Containers[0].Env[1].Name = app.Env[1].Name
 	dp.Spec.Template.Spec.Containers[0].Env[1].Value = app.Env[1].Value
-	dp.Spec.Template.Spec.Containers[0].Resources.Requests = app.Spec.Request
-	dp.Spec.Template.Spec.Containers[0].VolumeMounts = make([]deploy.VolumeMountsContainer, 1)
-	dp.Spec.Template.Spec.Containers[0].VolumeMounts[0].Name = app.MountPoints[0].Name
-	dp.Spec.Template.Spec.Containers[0].VolumeMounts[0].MountPath = app.MountPoints[0].MountPath
-	dp.Spec.Template.Spec.Containers[0].LivenessProbe.HttpGet.Path = app.HealthCheck.HttpGet.Path
-	dp.Spec.Template.Spec.Containers[0].LivenessProbe.HttpGet.Port = app.HealthCheck.HttpGet.Port
-	dp.Spec.Template.Spec.Containers[0].LivenessProbe.InitialDelaySeconds = app.HealthCheck.InitialDelaySeconds
-	dp.Spec.Template.Spec.Containers[0].LivenessProbe.PeriodSeconds = app.HealthCheck.PeriodSeconds
-	dp.Spec.Template.Spec.Containers[0].ReadinessProbe.HttpGet.Path = app.Readiness.HttpGet.Path
-	dp.Spec.Template.Spec.Containers[0].ReadinessProbe.HttpGet.Port = app.Readiness.HttpGet.Port
-	dp.Spec.Template.Spec.Containers[0].ReadinessProbe.InitialDelaySeconds = app.Readiness.InitialDelaySeconds
-	dp.Spec.Template.Spec.Containers[0].ReadinessProbe.PeriodSeconds = app.Readiness.PeriodSeconds
-	dp.Spec.Template.Spec.Containers[0].Lifecycle.PostStart.Exec.Command[0] = app.PostStart.Exec.Command[0]
-	dp.Spec.Template.Spec.Containers[0].Lifecycle.PreStop.Exec.Command[0] = app.PreStop.Exec.Command[0]
-	*/
+	// test status: failed. null
+	dp.Spec.Template.Spec.Containers[0].Resources = app.Spec
+	// test status: failed
+	// cann't find disk1
+	//dp.Spec.Template.Spec.Containers[0].VolumeMounts = make([]deploy.VolumeMountsContainer, 1)
+	//dp.Spec.Template.Spec.Containers[0].VolumeMounts[0].Name = app.MountPoints[0].Name
+	//dp.Spec.Template.Spec.Containers[0].VolumeMounts[0].MountPath = app.MountPoints[0].MountPath
+	// test status: ok
+	dp.Spec.Template.Spec.Containers[0].LivenessProbe = app.HealthCheck
+	dp.Spec.Template.Spec.Containers[0].ReadinessProbe = app.Readiness
+	// test status: ok but not take effect
+	dp.Spec.Template.Spec.Containers[0].Lifecycle = new(deploy.LifecycleContainer)
+	dp.Spec.Template.Spec.Containers[0].Lifecycle.PostStart = app.PostStart
+	dp.Spec.Template.Spec.Containers[0].Lifecycle.PreStop = app.PreStop
 
 	// post to k8s
 	var result []byte

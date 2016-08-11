@@ -59,6 +59,10 @@
             "value": "mushroom"
         }
     ],
+    "labels": {
+        "appname": "nginx-test",
+        "maintainer": "liyao"
+    },
     "command": [
         "echo"  
     ],

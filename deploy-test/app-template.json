@@ -1,0 +1,62 @@
+{
+    "name": "",
+    "namespace": "",
+    "datacenter": [
+        ""
+    ],
+    "image": "",
+    "replicas": {},
+    "spec": {
+        "request": "any"           
+    },
+    "configFile": [
+        ""  
+    ],
+    "mountPoints": [{
+        "name": "",
+        "mountPath": ""
+    }],
+    "healthCheck": {
+        "httpGet": {
+            "path": "",
+            "port": {} 
+        },
+        "initialDelaySeconds": {},
+        "periodSeconds": {} 
+    },
+    "readiness": {
+        "httpGet": {
+            "path": "",
+            "port": {} 
+        },
+        "initialDelaySeconds": {},
+        "periodSeconds": {}  
+    },
+    "postStart": {
+        "exec": {
+            "command": [
+                "" 
+            ]
+        }   
+    },
+    "preStop": {
+        "exec": {
+            "command": [
+                ""   
+            ]
+        }   
+    },
+    "env": [
+        {
+            "name": "", 
+            "value": ""
+        }
+    ],
+    "labels": "any",
+    "command": [
+        ""  
+    ],
+    "args": [
+        ""   
+    ]
+}
