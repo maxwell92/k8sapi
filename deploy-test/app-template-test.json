@@ -1,96 +1,96 @@
 {
-  "apiVersion": "extensions/v1beta1",
-    "kind": "Deployment",
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "lifecycle": {
+              "preStop": {
+                "exec": {
+                  "command": [
+                    "echopreStop"
+                  ]
+                }
+              },
+              "postStart": {
+                "exec": {
+                  "command": [
+                    "echopostStart"
+                  ]
+                }
+              }
+            },
+            "readinessProbe": {
+              "failureThreshold": 0,
+              "successThreshold": 0,
+              "periodSeconds": 2,
+              "timeoutSeconds": 0,
+              "initialDelaySeconds": 3,
+              "httpGet": {
+                "httpHeaders": null,
+                "scheme": "",
+                "host": "",
+                "port": 11001,
+                "path": "http://api/v1/readiness"
+              }
+            },
+            "name": "nginx-test",
+            "image": "nginx:1.7.9",
+            "command": [
+              "echo"
+            ],
+            "args": [
+              "abc"
+            ],
+            "ports": null,
+            "env": [
+              {
+                "value": "good",
+                "name": "magic"
+              },
+              {
+                "value": "mushroom",
+                "name": "sheep"
+              }
+            ],
+            "resources": {
+              "requests": null
+            },
+            "livenessProbe": {
+              "failureThreshold": 0,
+              "successThreshold": 0,
+              "periodSeconds": 2,
+              "timeoutSeconds": 0,
+              "initialDelaySeconds": 3,
+              "httpGet": {
+                "httpHeaders": null,
+                "scheme": "",
+                "host": "",
+                "port": 11000,
+                "path": "http://api/v1/healthz"
+              }
+            }
+          }
+        ]
+      },
       "metadata": {
-          "name": "nginx-test",
-	      "namespace": "default",
-	          "labels": {
-		        "appname": "nginx-test",
-			      "maintainer": "liyao"
-			          }
-				    },
-				      "spec": {
-				          "replicas": 3,
-					      "template": {
-					            "metadata": {
-						            "name": "nginx-test",
-							            "labels": {
-								              "appname": "nginx-test",
-									                "maintainer": "liyao"
-											        }
-												      },
-												            "spec": {
-													            "containers": [
-														              {
-															                  "name": "nginx-test",
-																	              "image": "nginx:1.7.9",
-																		                  "command": [
-																				                "echo"
-																						            ],
-																							                "args": [
-																									              "abc"
-																										                  ],
-																												              "ports": null,
-																													                  "env": [
-																															                {
-																																	                "name": "magic",
-																																			                "value": "good"
-																																					              },
-																																						                    {
-																																								                    "name": "sheep",
-																																										                    "value": "mushroom"
-																																												                  }
-																																														              ],
-																																															                  "resources": {
-																																																	                "requests": null
-																																																			            },
-																																																				                "livenessProbe": {
-																																																						              "httpGet": {
-																																																							                      "path": "http://api/v1/healthz",
-																																																									                      "port": 11000,
-																																																											                      "host": "",
-																																																													                      "scheme": "",
-																																																															                      "httpHeaders": null
-																																																																	                    },
-																																																																			                  "initialDelaySeconds": 3,
-																																																																					                "timeoutSeconds": 0,
-																																																																							              "periodSeconds": 2,
-																																																																								                    "successThreshold": 0,
-																																																																										                  "failureThreshold": 0
-																																																																												              },
-																																																																													                  "readinessProbe": {
-																																																																															                "httpGet": {
-																																																																																	                "path": "http://api/v1/readiness",
-																																																																																			                "port": 11001,
-																																																																																					                "host": "",
-																																																																																							                "scheme": "",
-																																																																																									                "httpHeaders": null
-																																																																																											              },
-																																																																																												                    "initialDelaySeconds": 3,
-																																																																																														                  "timeoutSeconds": 0,
-																																																																																																                "periodSeconds": 2,
-																																																																																																		              "successThreshold": 0,
-																																																																																																			                    "failureThreshold": 0
-																																																																																																					                },
-																																																																																																							            "lifecycle": {
-																																																																																																								                  "postStart": {
-																																																																																																										                  "exec": {
-																																																																																																												                    "command": [
-																																																																																																														                        "echopostStart"
-																																																																																																																	                  ]
-																																																																																																																			                  }
-																																																																																																																					                },
-																																																																																																																							              "preStop": {
-																																																																																																																								                      "exec": {
-																																																																																																																										                        "command": [
-																																																																																																																													                    "echopreStop"
-																																																																																																																															                      ]
-																																																																																																																																	                      }
-																																																																																																																																			                    }
-																																																																																																																																					                }
-																																																																																																																																							          }
-																																																																																																																																								          ]
-																																																																																																																																									        }
-																																																																																																																																										    }
-																																																																																																																																										      }
-																																																																																																																																										      }
+        "labels": {
+          "maintainer": "liyao",
+          "appname": "nginx-test"
+        },
+        "name": "nginx-test"
+      }
+    },
+    "replicas": 3
+  },
+  "metadata": {
+    "labels": {
+      "maintainer": "liyao",
+      "appname": "nginx-test"
+    },
+    "namespace": "default",
+    "name": "nginx-test"
+  },
+  "kind": "Deployment",
+  "apiVersion": "extensions/v1beta1"
+}
