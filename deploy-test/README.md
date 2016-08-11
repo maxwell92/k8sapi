@@ -1,6 +1,7 @@
-refer to goweb-basic-sheet.go
+使用app.json的时候，需要将里面的mountPoints字段、Spec字段以及datacenter字段干掉。
 
-lack of upload.html and upload-client.go
+datacenter字段是因为k8s没有的json里面没有这个属性
 
-删除rs要连对应的pod一起删除
+spec字段对应k8s的resources，目前值设置有误
 
+mountPoints字段同上
