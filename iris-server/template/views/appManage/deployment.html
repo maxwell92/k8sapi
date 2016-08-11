@@ -1,0 +1,262 @@
+<section class="wrapper main-wrapper row">
+    
+    <div class='col-xs-12'>
+        <div class="page-title">
+
+            <div class="pull-left">
+                <h1 class="title">应用发布</h1>                            </div>
+
+                            <div class="pull-right hidden-xs">
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="index.html"><i class="fa fa-home"></i>主页</a>
+                        </li>
+                        <li>
+                            <a href="eco-customers.html">应用管理</a>
+                        </li>
+                        <li class="active">
+                            <strong>应用发布</strong>
+                        </li>
+                    </ol>
+                </div>
+                                
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-xs-12">
+    <section class="box ">
+            <header class="panel_header">
+                <h2 class="title pull-left">基本配置</h2>
+                <div class="actions panel_actions pull-right">
+                	<a class="box_toggle fa fa-chevron-down"></a>
+                    <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
+                    <a class="box_close fa fa-times"></a>
+                </div>
+            </header>
+            <div class="content-body">
+    <div class="row">
+    <form action ="#" method="post">
+                    <div class="col-xs-12 col-sm-9 col-md-8">
+                        
+			<div class="form-group">
+                            <label class="form-label" >应用名：
+                            </label>
+                            <span class="desc">应用名是您将要创建的应用的名称，组织内唯一</span>
+                            <div class="controls">
+                                <input type="text" value="" class="form-control" ng-model="name" >
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="form-label" >组织：</label>
+                            <span class="desc">组织名是您所属的组织</span>
+                            <div class="controls">
+                                <input type="text" value="" class="form-control datepicker" data-format="mm/dd/yyyy" >
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" >数据中心：</label>
+                            <span class="desc">数据中心是您的应用将要部署到的位置</span>
+                                <p class="post-checkbox">
+                                    <span class="user-checkboxs">
+                                        <input type="checkbox" id="user-dx"><label for="user-dx">电信</label>
+                                    </span>
+                                    <span class="user-checkboxs">
+                                        <input type="checkbox" class="user-checkboxs" id="user-sjhl"><label for="user-sjhl">世纪互联</label>
+                                    </span>
+                                    <span class="user-checkboxs">
+                                        <input type="checkbox" class="user-checkboxs" id="user-rz"><label for="user-rz">润泽</label>
+                                    </span>
+
+                                </p>
+                        </div>
+                        
+                       
+                        
+                        <div class="form-group">
+                            <label class="form-label" >镜像：</label>
+                            <span class="desc">镜像是您创建应用的根据</span>
+                            <div class="controls">
+                                <input type="text" value="" class="form-control datepicker" data-format="mm/dd/yyyy" >
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" >副本数：</label>
+                            <span class="desc">副本数是您创建应用的实例个数</span>
+                            <div class="controls">
+                                <input type="text" value="" class="form-control datepicker" data-format="mm/dd/yyyy" >
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" >规格：</label>
+                            <span class="desc">规格是您为应用所申请的资源规格</span>
+                                <p class="post-radios-p">
+                                    <span>
+                                        <input type="radio" class="user-radios" name="post-radios" id="user-2x">
+                                        <label for="user-2x">
+                                            <b class="post-spans1">2X</b>
+                                            <b class="post-spans2">CPU: 2 Core MEM: 2GB</b>
+                                        </label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" class="user-radios" name="post-radios" id="user-16x">
+                                        <label for="user-16x">
+                                            <b class="post-spans1">16X</b>
+                                            <b class="post-spans2">CPU: 4 Core MEM: 8GB</b>
+                                        </label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" class="user-radios" name="post-radios" id="user-32x">
+                                        <label for="user-32x">
+                                            <b class="post-spans1">32X</b>
+                                            <b class="post-spans2">CPU: 8 Core MEM: 16GB</b>
+                                        </label>
+                                    </span>
+
+                                </p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" >标签组：</label>
+                            <span class="desc">标签组是您的应用特殊的标记</span>
+                            <div class="controls">
+                                <input type="text" value="name" class="" > :
+                                <input type="text" value="{{name    }}" class=""  ><button class="post-btn">+</button>
+
+                            </div>
+                        </div>
+                           
+                        <div class="form-group">
+                            <label class="form-label" >配置文件</label>
+                            <span class="desc">配置文件是您的应用依赖的配置</span>
+                                <div class="controls">
+                                <input type="file" class="form-control" >
+                            </div>
+                        </div>
+                        
+                        
+                        
+                        
+                    
+                        <div class="form-group">
+                            <label class="form-label" >挂载：</label>
+                            <span class="desc">挂载为您的应用挂载所需的数据卷</span>
+                            <div class="controls">
+                                <input type="text" value=""> :
+                                <select>
+                                    <option>Disk1</option>
+                                    <option>Disk2</option>
+                                    <option>Disk3</option>
+                                    <option>Disk4</option>
+
+                                </select>
+
+                            </div>
+                        </div>
+                        
+                        
+                        
+                    </form>
+    </div>
+
+
+    </div>
+        </section></div>
+
+
+<div class="col-xs-12">
+    <section class="box ">
+            <header class="panel_header">
+                <h2 class="title pull-left">高级配置</h2>
+                <div class="actions panel_actions pull-right">
+                	<a class="box_toggle fa fa-chevron-down"></a>
+                    <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
+                    <a class="box_close fa fa-times"></a>
+                </div>
+            </header>
+            <div class="content-body">
+    <div class="row">
+   <form action="#" method="post">
+                    <div class="col-xs-12 col-sm-9 col-md-8">
+                        
+			<div class="form-group">
+                            <label class="form-label" >健康检查</label>
+                            <span class="desc">健康检查以确定您的健康程度</span>
+                            <div class="controls">
+                                <input type="text" value="" class="form-control" >
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" >可读性检查</label>
+                            <span class="desc">可读性检查以确定您的应用的可读性</span>
+                            <div class="controls">
+                                <input type="text" value="" class="form-control"  data-mask="phone"  placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" >优雅停止</label>
+                            <span class="desc">优雅停止在您的应用结束后做好收尾工作</span>
+                            <div class="controls">
+                                <input type="text" value="" class="form-control"  data-mask="phone"  placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" >环境变量</label>
+                            <span class="desc">环境变量是您的应用运行所需的一些常见变量</span>
+                            <div class="controls">                                
+                                <input type="text" value="" class="form-control"  data-mask="phone"  placeholder="">
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" >执行命令</label>
+                            <span class="desc">执行命令为除您的应用外还需执行的命令</span>
+                            <div class="controls">
+                                <input type="text" value="" class="form-control"  data-mask="phone"  placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" >参数</label>
+                            <span class="desc">参数为执行命令所需的参数</span>
+                            <div class="controls">                                
+                                <input type="text" value="" class="form-control"  data-mask="phone"  placeholder="">
+
+                            </div>
+                        </div>
+                    </div>
+ 
+
+                        
+                    </form>
+    </div>
+
+
+    </div>
+        </section></div>
+
+<div class="col-xs-12">
+    <section class="box ">
+            
+        <div class="content-body">
+            <div class="row">
+                <form action="#" method="post">
+                    <div class="col-xs-12 col-sm-9 col-md-8 padding-bottom-30">
+                        <div class="text-left">
+                            <button type="button" class="btn btn-primary">提交</button>
+                            <button type="button" class="btn">取消</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        </section>
+    </div>
+</section>
