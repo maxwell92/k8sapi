@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -105,11 +106,12 @@ func Service(w http.ResponseWriter, r *http.Request) {
 
 func App(w http.ResponseWriter, r *http.Request) {
 	var dc deployc.DeploymentController
-	url := "/handle"
+	url := "http://localhost:10000/handle" //no cross origin
 	resp, err := dc.DeployApp(url)
 
 	if err != nil {
 		log.Println(err)
+		panic(err)
 	} else {
 		fmt.Println(string(resp))
 	}
@@ -118,7 +120,13 @@ func App(w http.ResponseWriter, r *http.Request) {
 
 func Handle(w http.ResponseWriter, r *http.Request) {
 	var dc deployc.DeploymentController
-	resp, err := dc.Handle()
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(string(body))
+	fmt.Println("put 2 k8s:")
+	resp, err := dc.Handle(body)
 	if err != nil {
 		log.Println(err)
 	} else {

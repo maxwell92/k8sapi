@@ -1,117 +1,68 @@
 {
-    "name": "",
-    "namespace": "",
-    "datacenter": "",  
-    "image": "",
-    "replicas": {},
+    "name": "nginx-test",
+    "namespace": "default",
+    "datacenter": [
+        "shijihulian"
+    ],
+    "image": "nginx:1.7.9",
+    "replicas": 3,
     "spec": {
-        "request": "any"
+        "request": {
+            "cpu": "2",
+            "mem": "512"
+        }           
     },
-    "env": [{
-        "name": "",
-        "value": ""
-    }],
-    "labels": "any", 
-    "configFile": "",
+    "configFile": [
+        "/root/nginx.conf"  
+    ],
     "mountPoints": [{
-        "name": "",
-        "readOnly": false,
-        "mountPath": ""
+        "name": "disk1",
+        "mountPath": "/usr/local/nginx/html"
     }],
     "healthCheck": {
-        "exec": {
-            "command": [
-                ""
-            ]
-        },
         "httpGet": {
-            "path": "",
-            "port": {},
-            "host": "",
-            "scheme": "",
-            "httpHeaders": [{
-                "name": "",
-                "value": ""
-            }] 
+            "path": "http://api/v1/healthz",
+            "port": 11000
         },
-        "tcpSocket": {
-            "port": {} 
-        },
-        "initialDelaySeoncds": {},
-        "timeoutSeconds": {},
-        "periodSeconds": {},
-        "successThreshold": {},
-        "failureThreshold": {}
+        "initialDelaySeconds": 3,
+        "periodSeconds": 2
     },
     "readiness": {
-         "exec": {
-            "command": [
-                ""
-            ]
-        },
         "httpGet": {
-            "path": "",
-            "port": {},
-            "host": "",
-            "scheme": "",
-            "httpHeaders": [{
-                "name": "",
-                "value": ""
-            }] 
+            "path": "http://api/v1/readiness",
+            "port": 11001
         },
-        "tcpSocket": {
-            "port": {} 
-        },
-        "initialDelaySeoncds": {},
-        "timeoutSeconds": {},
-        "periodSeconds": {},
-        "successThreshold": {},
-        "failureThreshold": {}
+        "initialDelaySeconds": 3,
+        "periodSeconds": 2  
     },
     "postStart": {
         "exec": {
             "command": [
-                ""
+                "echopostStart" 
             ]
-        },
-        "httpGet": {
-            "path": "",
-            "port": {},
-            "host": "",
-            "scheme": "",
-            "httpHeaders": [{
-                "name": "",
-                "value": ""
-            }]
-        },
-        "tcpSocket": {
-            "port": {} 
-        }
+        }   
     },
     "preStop": {
         "exec": {
             "command": [
-                ""
+                "echopreStop"   
             ]
-        },
-        "httpGet": {
-            "path": "",
-            "port": {},
-            "host": "",
-            "scheme": "",
-            "httpHeaders": [{
-                "name": "",
-                "value": ""
-            }] 
-        },
-        "tcpSocket": {
-            "port": {} 
-        }
+        }   
     },
+    "env": [
+        {
+            "name": "magic", 
+            "value": "good"
+        },
+        {
+            "name": "sheep",
+            "value": "mushroom"
+        }
+    ],
     "command": [
-        ""
+        "echo"  
     ],
     "args": [
-        ""
+        "abc"   
     ]
 }

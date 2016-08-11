@@ -121,10 +121,10 @@ var myApp = `
 	"configFile": [
 		"/root/nginx.conf"	
 	],
-	"mountPoints": {
+	"mountPoints": [{
 		"name": "disk1",
 		"mountPath": "/usr/local/nginx/html"
-	},
+	}],
 	"healthCheck": {
 		"httpGet": {
 			"path": "http://api/v1/healthz",
@@ -134,23 +134,40 @@ var myApp = `
 		"periodSeconds": 2
 	},
 	"readiness": {
-		"exec": {
-			"echo readiness"	
-		}	
+		"httpGet": {
+			"path": "http://api/v1/readiness",
+			"port": 11001
+	    },
+		"initialDelaySeconds": 3,
+		"periodSeconds": 2	
 	},
 	"postStart": {
 		"exec": {
-			"echo postStart"	
+			"command": [
+				"echopostStart"	
+			]
 		}	
 	},
 	"preStop": {
 		"exec": {
-			"echo preStop"	
+			"command": [
+				"echopreStop"	
+			]
 		}	
 	},
-	"env": {
-		"magic": "good",
-		"sheep": "mushroom"
+	"env": [
+		{
+			"name": "magic", 
+			"value": "good"
+		},
+		{
+			"name": "sheep",
+			"value": "mushroom"
+		}
+	],
+	"labels": {
+		"appname": "nginx-test",
+		"maintainer": "liyao"
 	},
 	"command": [
 		"echo"	
@@ -184,7 +201,7 @@ func (dc *DeploymentController) Delete(url string) {
 	}
 }
 
-func (dc *DeploymentController) DeployApp(url string) {
+func (dc *DeploymentController) DeployApp(url string) ([]byte, error) {
 	client := hc.NewHttpClient("", "")
 	resp, err := client.Post(url, strings.NewReader(string(myApp)))
 	if err != nil {
@@ -192,24 +209,28 @@ func (dc *DeploymentController) DeployApp(url string) {
 	} else {
 		fmt.Println(string(resp))
 	}
+	return resp, err
 }
 
-func (dc *DeploymentController) Handle() ([]byte, error) {
+func (dc *DeploymentController) Handle(appJson []byte) ([]byte, error) {
 
 	//TODO: Unmarshal
 	//appDeploy := new(deploy.AppDeployment)
 	var app deploy.AppDeployment
-	//err := json.Unmarshal(myApp, &app)
-	myAppByte, err := strings.NewReader(myApp).ReadByte()
+	var err error
+	err = json.Unmarshal(appJson, &app)
+	//myAppByte, err := strings.NewReader(myApp).ReadByte()
 	if err != nil {
 		log.Println(err)
 	}
 
-	err := json.Unmarshal(myAppByte, &app)
+	fmt.Println(app)
+
+	/*err = json.Unmarshal(myAppByte, &app)
 	if err != nil {
 		log.Println(err)
 	}
-
+	*/
 	// Validation of dc
 	/* for k, v := range app.Datacenter {
 		mysql.Query(v)
@@ -226,23 +247,38 @@ func (dc *DeploymentController) Handle() ([]byte, error) {
 	dp.Spec.Replicas = app.Replicas
 	dp.Spec.Template.Metadata.Name = app.Name
 	dp.Spec.Template.Metadata.Labels = app.Labels
+	dp.Spec.Template.Spec.Containers = make([]deploy.ContainerType, 1)
 	dp.Spec.Template.Spec.Containers[0].Name = app.Name
 	dp.Spec.Template.Spec.Containers[0].Image = app.Image
 	dp.Spec.Template.Spec.Containers[0].Command = app.Command
 	dp.Spec.Template.Spec.Containers[0].Args = app.Args
-	dp.Spec.Template.Spec.Containers[0].Env = app.Env
+	/*dp.Spec.Template.Spec.Containers[0].Env = make([]deploy.EnvContainer, 2)
+	dp.Spec.Template.Spec.Containers[0].Env[0].Name = app.Env[0].Name
+	dp.Spec.Template.Spec.Containers[0].Env[0].Value = app.Env[0].Value
+	dp.Spec.Template.Spec.Containers[0].Env[1].Name = app.Env[1].Name
+	dp.Spec.Template.Spec.Containers[0].Env[1].Value = app.Env[1].Value
 	dp.Spec.Template.Spec.Containers[0].Resources.Requests = app.Spec.Request
-	dp.Spec.Template.Spec.Containers[0].VolumeMounts = app.MountPoints
-	dp.Spec.Template.Spec.Containers[0].LivenessProbe = app.HealthCheck
-	dp.Spec.Template.Spec.Containers[0].ReadinessProbe = app.Readiness
-	dp.Spec.Template.Spec.Containers[0].Lifecycle.PostStart = app.PostStart
-	dp.Spec.Template.Spec.Containers[0].Lifecycle.PreStop = app.PreStop
+	dp.Spec.Template.Spec.Containers[0].VolumeMounts = make([]deploy.VolumeMountsContainer, 1)
+	dp.Spec.Template.Spec.Containers[0].VolumeMounts[0].Name = app.MountPoints[0].Name
+	dp.Spec.Template.Spec.Containers[0].VolumeMounts[0].MountPath = app.MountPoints[0].MountPath
+	dp.Spec.Template.Spec.Containers[0].LivenessProbe.HttpGet.Path = app.HealthCheck.HttpGet.Path
+	dp.Spec.Template.Spec.Containers[0].LivenessProbe.HttpGet.Port = app.HealthCheck.HttpGet.Port
+	dp.Spec.Template.Spec.Containers[0].LivenessProbe.InitialDelaySeconds = app.HealthCheck.InitialDelaySeconds
+	dp.Spec.Template.Spec.Containers[0].LivenessProbe.PeriodSeconds = app.HealthCheck.PeriodSeconds
+	dp.Spec.Template.Spec.Containers[0].ReadinessProbe.HttpGet.Path = app.Readiness.HttpGet.Path
+	dp.Spec.Template.Spec.Containers[0].ReadinessProbe.HttpGet.Port = app.Readiness.HttpGet.Port
+	dp.Spec.Template.Spec.Containers[0].ReadinessProbe.InitialDelaySeconds = app.Readiness.InitialDelaySeconds
+	dp.Spec.Template.Spec.Containers[0].ReadinessProbe.PeriodSeconds = app.Readiness.PeriodSeconds
+	dp.Spec.Template.Spec.Containers[0].Lifecycle.PostStart.Exec.Command[0] = app.PostStart.Exec.Command[0]
+	dp.Spec.Template.Spec.Containers[0].Lifecycle.PreStop.Exec.Command[0] = app.PreStop.Exec.Command[0]
+	*/
 
 	// post to k8s
 	var result []byte
 	client := hc.NewHttpClient("", "")
 	url := "http://master:8080/apis/extensions/v1beta1/namespaces/default/deployments"
 	result, _ = json.MarshalIndent(dp, "", "  ")
+	fmt.Println(string(result))
 	resp, err := client.Post(url, strings.NewReader(string(result)))
 	return resp, err
 	// write back the response
