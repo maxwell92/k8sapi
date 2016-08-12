@@ -9,18 +9,24 @@ type AbcController struct {
 	*iris.Context
 }
 
-func (ac AbcController) Get() {
+/*
+func (ac AbcController) GetBy() {
 	id := ac.Param("id")
 	fmt.Printf("Get from /abc/%s\n", id)
 	ac.Write("Get from /abc/" + id)
 }
-
+*/
 /*
+func (ac AbcController) GetBy(id string) {
+	fmt.Printf("Get from /abc/%s\n", id)
+	ac.Write("Get from /abc/" + id)
+}
+*/
 func (ac AbcController) Get() {
 	fmt.Println("get from Get")
 	ac.Write("get from /abc")
 }
-*/
+
 func (ac AbcController) Post() {
 	oid := ac.Param("oid")
 	lid := ac.Param("lid")
@@ -32,6 +38,6 @@ func main() {
 	abc := new(AbcController)
 	//iris.API("/abc/:id", *abc)
 	iris.API("/abc", *abc)
-	iris.API("/abc/:oid/lalala/:lid", *abc)
+	iris.API("/abc/:od/lalala/:ld", *abc)
 	iris.Listen(":10000")
 }
