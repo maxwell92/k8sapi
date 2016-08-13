@@ -28,8 +28,9 @@ func StaticServer(prefix string, staticDir string) {
 }
 
 func main() {
-	StaticServer("/template/", "./template")
-	http.HandleFunc("/", Hello)
+	//StaticServer("/template/", "./template")
+	StaticServer("/", "./template/html")
+	//http.HandleFunc("/", Hello)
 	http.HandleFunc("/app", App)
 	err := http.ListenAndServe(":10000", nil)
 	if err != nil {
