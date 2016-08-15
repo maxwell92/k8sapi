@@ -1,23 +1,14 @@
 package main
 
 import (
-	//"fmt"
-	color "github.com/iris-contrib/color"
+	"fmt"
+	//color "github.com/iris-contrib/color"
+	"github.com/iris-contrib/template/html"
 	iris "github.com/kataras/iris"
-	ia "irisapi"
+	//ia "irisapi"
 )
 
 const (
-	banner = `
-               *
-              | |
-              | |
-           - -   - -
-          | | | | | |
-          | | | | | |
-          -----------  
-(o゜▽゜)o  is listening on :10000
-`
 	nv = `
 {
   "list": [
@@ -128,17 +119,38 @@ const (
 `
 )
 
+type page struct {
+	Title string
+}
+
 func navList(ctx *iris.Context) {
-	//fmt.Fprintln(w, nv)
 	ctx.Write(nv)
 }
-func init() {
-	iris.StaticServe("./template", "/static")
-	iris.Get("/navlist", navList)
-	color.Cyan(banner)
+func Init() {
+	//iris.StaticServe("./template", "/static")
+	iris.UseTemplate(html.New()).Directory("./template", ".html")
+	iris.Static("/css", "./template/css", 1)
+	iris.Static("/js", "./template/js", 1)
+	iris.Static("/image", "./template/image", 1)
+	iris.Static("/styles", "./template/styles", 1)
+	iris.Static("/fonts", "./template/fonts", 1)
+	iris.Static("/scripts", "./template/scripts", 1)
+	iris.StaticServe("./template/assets", "/assets")
 }
 
 func main() {
-	iris.API("/deployment", ia.DeploymentAPI{})
+	Init()
+	iris.Get("/", func(ctx *iris.Context) {
+		ctx.MustRender("index.html", page{Title: "index"})
+		fmt.Println("this is /")
+	})
+
+	iris.Get("/navlist", navList)
+	// GET List
+	//iris.API("/api/v1/deployments/:oid/deployments", ia.DeploymentController{})
+	// GET Details
+	//iris.API("/api/v1/organizations/:oid/deployments/:id", ia.DeploymentController{})
+	// POST
+	//iris.API("/api/v1/deployments", ia.DeploymentController{})
 	iris.Listen(":10000")
 }

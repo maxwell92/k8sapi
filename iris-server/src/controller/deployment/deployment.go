@@ -5,13 +5,38 @@ import (
 	"fmt"
 	hc "httpclient"
 	"log"
-	deploy "model/deployment"
-
 	"strings"
+
+	"github.com/kataras/iris"
+	deploy "model/deployment"
 )
 
 type DeploymentController struct {
-	Name string
+	*iris.Context
+}
+
+func (dc *DeploymentController) Get(url string) {
+
+}
+
+func (dc *DeploymentController) GetById() {
+
+}
+
+func (dc *DeploymentController) DeleteById() {
+
+}
+
+func (dc *DeploymentController) Post() {
+
+}
+
+func (dc *DeploymentController) Encode() {
+
+}
+
+func (dc *DeploymentController) Decode() {
+
 }
 
 func (dc *DeploymentController) Get(url string) {
