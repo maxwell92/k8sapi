@@ -23,21 +23,31 @@ func (ac AbcController) GetBy(id string) {
 }
 */
 func (ac AbcController) Get() {
-	fmt.Println("get from Get")
-	ac.Write("get from /abc")
+	od := ac.Param("od")
+	ld := ac.Param("ld")
+	fmt.Printf("get from /abc/%s/lalala/%s\n", od, ld)
+
+	//fmt.Println("get from Get")
+	//ac.Write("get from /abc")
 }
 
+/*
+func (ac AbcController) GetBy() {
+	od := ac.Param("od")
+	fmt.Printf("get from /abc/%s\n", od)
+}
+*/
 func (ac AbcController) Post() {
-	oid := ac.Param("oid")
-	lid := ac.Param("lid")
-	fmt.Printf("post from /abc/%s/lalala/%s\n", oid, lid)
-	ac.Write("post from /abc/" + oid + "/lalala/" + lid)
-}
+	od := ac.Param("od")
+	//ld := ac.Param("ld")
+	fmt.Printf("post from /abc/%s/lalala\n", od)
 
+}
 func main() {
 	abc := new(AbcController)
-	//iris.API("/abc/:id", *abc)
-	iris.API("/abc", *abc)
+	//iris.API("/abc", *abc)
 	iris.API("/abc/:od/lalala/:ld", *abc)
+	iris.API("/abc/:od/lalala", *abc)
+	iris.API("/abc", *abc)
 	iris.Listen(":10000")
 }
