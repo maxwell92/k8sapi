@@ -51,11 +51,11 @@ func (ac AbcController) Post() {
 
 }
 */
-/*
+
 func (ac AbcController) Get(od string) {
 	fmt.Printf("Get from /abc/%s/deploy\n", od)
 }
-*/
+
 // iris.API("/abc", *abc) cann't run this
 /*
 func (ac AbcController) GetBy(od string, id string) {
@@ -85,7 +85,7 @@ func main() {
 	//iris.API("/abc", *abc)
 	//iris.API("/abc/:od/lalala/:ld", *abc)
 	//iris.API("/abc/:od/lalala", *abc)
-	//iris.API("/abc", *abc)
 	iris.API("/abc", *abc)
+	//iris.API("/abc/:od/lalala/:id", *abc)
 	iris.Listen(":10000")
 }
