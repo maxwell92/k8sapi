@@ -131,18 +131,25 @@ func Init() {
 	iris.UseTemplate(html.New()).Directory("./template", ".html")
 	iris.Static("/css", "./template/css", 1)
 	iris.Static("/js", "./template/js", 1)
-	iris.Static("/image", "./template/image", 1)
+	iris.Static("/images", "./template/image", 1)
 	iris.Static("/styles", "./template/styles", 1)
 	iris.Static("/fonts", "./template/fonts", 1)
 	iris.Static("/scripts", "./template/scripts", 1)
-	iris.StaticServe("./template/assets", "/assets")
+	iris.Static("/views", "./template/views/", 1)
+	iris.Static("/data", "./template/data/", 1)
+	iris.Static("/assets", "./template/assets", 1)
 }
 
 func main() {
 	Init()
 	iris.Get("/", func(ctx *iris.Context) {
-		ctx.MustRender("index.html", page{Title: "index"})
-		fmt.Println("this is /")
+		err := ctx.Render("index.html", page{Title: "index"})
+		if err != nil {
+			fmt.Println(err)
+			panic(err)
+		} else {
+			fmt.Println("this is /")
+		}
 	})
 
 	iris.Get("/navlist", navList)
