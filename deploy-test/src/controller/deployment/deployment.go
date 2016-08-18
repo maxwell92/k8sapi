@@ -79,6 +79,7 @@ var myDeploy = `
 	"apiVersion": "extensions/v1beta1",
 	"metadata": {
 		"name": "nginx-test",
+		"namespace": "ops",
 		"labels": {
 			"name": "nginx-test",
 			"maintainer": "maxwell"
@@ -106,7 +107,7 @@ var myDeploy = `
 var myApp = `
 {
 	"name": "nginx-test",
-	"namespace": "default",
+	"namespace": "ops",
 	"datacenter": [
 		"shijihulian"
 	],

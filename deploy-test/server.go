@@ -21,15 +21,15 @@ func sayhelloName(w http.ResponseWriter, r *http.Request) {
 func Deploy(w http.ResponseWriter, r *http.Request) {
 	var dc deployc.DeploymentController
 
-	dc.Get("http://204.11.99.12:8080/apis/extensions/v1beta1/namespaces/default/deployments")
+	dc.Get("http://master:8080/apis/extensions/v1beta1/namespaces/ops/deployments")
 
-	dc.Post("http://204.11.99.12:8080/apis/extensions/v1beta1/namespaces/default/deployments")
+	dc.Post("http://master:8080/apis/extensions/v1beta1/namespaces/ops/deployments")
 
-	dc.Get("http://204.11.99.12:8080/apis/extensions/v1beta1/namespaces/default/deployments")
+	dc.Get("http://master:8080/apis/extensions/v1beta1/namespaces/ops/deployments")
 
-	dc.Delete("http://204.11.99.12:8080/apis/extensions/v1beta1/namespaces/default/deployments/nginx-test")
+	//dc.Delete("http://204.11.99.12:8080/apis/extensions/v1beta1/namespaces/default/deployments/nginx-test")
 
-	dc.Get("http://204.11.99.12:8080/apis/extensions/v1beta1/namespaces/default/deployments")
+	//dc.Get("http://204.11.99.12:8080/apis/extensions/v1beta1/namespaces/default/deployments")
 }
 
 func Endpoint(w http.ResponseWriter, r *http.Request) {
@@ -55,9 +55,9 @@ func Namespace(w http.ResponseWriter, r *http.Request) {
 
 	nc.Get("http://master:8080/api/v1/namespaces")
 
-	nc.Delete("http://master:8080/api/v1/namespaces/nginx-ns-test")
+	//	nc.Delete("http://master:8080/api/v1/namespaces/nginx-ns-test")
 
-	nc.Get("http://master:8080/api/v1/namespaces")
+	//	nc.Get("http://master:8080/api/v1/namespaces")
 
 }
 func Pod(w http.ResponseWriter, r *http.Request) {
